@@ -3,6 +3,7 @@
 #include <iomanip>  // Leidžia formatuoti išvestį
 #include <vector>   // Leidžia įvesti vektorius
 #include <string>   // Leidžia įvesti string tipo kintamuosius
+#include <limits>   // Naudojama valyti įvesties srautą
 
 using std::cout;    // Išvedimas
 using std::cin;     // Įvedimas
@@ -28,7 +29,17 @@ Studentas ivesk();
 int main() {
     vector<Studentas> Grupe;
     int kiek;
-    cout<<"Kiek studentų yra grupėje? "; cin>>kiek;
+    // Tikriname studentų skaičiaus įvedimą
+    while (true) {
+        cout<<"Kiek studentų yra grupėje? ";
+        if (cin >> kiek && kiek > 0) {
+            break; // teisingas įvedimas
+        } else {
+            cout<<"Klaida: studentų skaičius turi būti teigiamas skaičius! Įvesti dar kartą.\n";
+            cin.clear(); // nuimam failbit
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // išvalom blogą įvestį
+        }
+    }
     for (int j=0; j<kiek; j++) {
         cout<<"Įveskite "<<j+1<<" studentą:\n";
         Grupe.push_back(ivesk());
@@ -39,16 +50,46 @@ int main() {
 
 Studentas ivesk() {
     Studentas Laik;
-    int sum=0, n,  m;    
+    int sum=0, n, m;    
     cout<<"Įveskite studento vardą: "; cin>>Laik.vard;
     cout<<"Įveskite studento pavardę: "; cin>>Laik.pav;
-    cout<<"Kiek pažymių turi studentas? "; cin>>n;
+
+    while (true) {
+        cout<<"Kiek pažymių turi studentas? "; cin>>n;
+        if (n > 0) {
+            break;
+        } else {
+            cout<<"Klaida: pažymių kiekis turi būti teigiamas skaičius! Įvesti dar kartą.\n";
+            cin.clear(); // išvalom klaidos būseną
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // išvalom blogą įvestį
+        }
+    }
+
     for (int i=0; i<n; i++) {
-        cout<<"Įveskite "<<i+1<<" paz. iš "<<n<<" : "; cin>>m;
+        do {
+            cout<<"Įveskite "<<i+1<<" pažymį iš "<<n<<" : "; cin>>m;
+            if (m < 1 || m > 10) {
+                cout<<"Klaida: pažymys turi būti nuo 1 iki 10! Pažymį įvesti dar kartą.\n";
+                // Valome įvesties srautą, kad išvengtume begalinio ciklo, jei įvedamas ne skaičius
+                cin.clear();
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+        } while (m < 1 || m > 10);  // kartojame, kol įvedama teisingai
         Laik.paz.push_back(m);
         sum+=m;
     }
-    cout<<"Įveskite egzamino rezultatą: "; cin>>Laik.egzas;
-    Laik.rez = Laik.egzas*0.6+double(sum)/double(Laik.paz.size())*0.4;
+
+    do {
+        cout<<"Įveskite egzamino rezultatą (1-10): ";
+        cin>>Laik.egzas;
+        if (Laik.egzas < 1 || Laik.egzas > 10) {
+            cout<<"Klaida: egzamino įvertinimas turi būti nuo 1 iki 10! Įvertinimą įvesti dar kartą.\n";
+            // Valome įvesties srautą, kad išvengtume begalinio ciklo, jei įvedamas ne skaičius
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    } while (Laik.egzas < 1 || Laik.egzas > 10);
+
+    Laik.rez = Laik.egzas*0.6 + double(sum)/double(Laik.paz.size())*0.4;
     return Laik;
 }
