@@ -1,18 +1,22 @@
 // v.pradinė
-#include <iostream> // Leidžia naudoti cin ir cout
-#include <iomanip>  // Leidžia formatuoti išvestį
-#include <vector>   // Leidžia įvesti vektorius
-#include <string>   // Leidžia įvesti string tipo kintamuosius
-#include <limits>   // Naudojama valyti įvesties srautą
+#include <iostream>         // Leidžia naudoti cin ir cout
+#include <iomanip>          // Leidžia formatuoti išvestį
+#include <vector>           // Leidžia įvesti vektorius
+#include <string>           // Leidžia įvesti string tipo kintamuosius
+#include <limits>           // Naudojama valyti įvesties srautą
+#include <algorithm>        // Leidžia naudoti sort funkciją
 
-using std::cout;    // Išvedimas
-using std::cin;     // Įvedimas
-using std::endl;    // Nauja eilutė
-using std::string;  // String tipo kintamieji
-using std::vector;  // Vektoriai
-using std::setw;    // Išvedimo metu nurodo plotį
-using std::left;    // Lygiavimas į kairę
-using std::right;   // Lygiavimas į dešinę
+using std::cout;            // Išvedimas
+using std::cin;             // Įvedimas
+using std::endl;            // Nauja eilutė
+using std::string;          // String tipo kintamieji
+using std::vector;          // Vektoriai
+using std::setw;            // Išvedimo metu nurodo plotį
+using std::left;            // Lygiavimas į kairę
+using std::right;           // Lygiavimas į dešinę
+using std::fixed;           // Fiksuotas kablelis
+using std::setprecision;    // Nustato skaičių po kablelio skaičių
+using std::sort;            // Rūšiavimas
 
 // Aprašomas nuosavas duomenų tipas
 struct Studentas {
@@ -20,9 +24,10 @@ struct Studentas {
     string pav;
     vector<int> paz;
     int egzas;
-    float rez;
+    float rez_vid, rez_med;
 };
 
+float sk_mediana(vector<int> paz);
 Studentas ivesk();
 
 // Pagrindinė programos funkcija
@@ -44,10 +49,18 @@ int main() {
         cout<<"Įveskite "<<j+1<<" studentą:\n";
         Grupe.push_back(ivesk());
     }
-    cout << left << setw(15) << "Vardas" << "| " << setw(15) << "Pavardė" << " | " << setw(20) << "Galutinis įvertinimas" << endl;
-    cout << std::string(55, '-') << endl; // atskyrimo linija
+    cout << left << setw(15) << "Vardas"
+     << "| " << setw(15) << "Pavardė"
+     << "| " << right << setw(15) << "Galutinis (vid.)"
+     << " | " << setw(15) << "Galutinis (med.)"
+     << endl;
+    cout << std::string(65, '-') << endl; // atskyrimo linija
     for (auto temp: Grupe)
-        cout<< left << setw(15)<<temp.vard<<"| "<<setw(15)<<temp.pav<<"|"<<right<<setw(20)<<temp.rez<<endl;
+        cout << left << setw(15) << temp.vard
+         << "| " << setw(15) << temp.pav
+         << "| " << right << setw(15) << fixed << setprecision(2) << temp.rez_vid
+         << " | " << setw(15) << fixed << setprecision(2) << temp.rez_med
+         << endl;
 }
 
 Studentas ivesk() {
@@ -92,6 +105,19 @@ Studentas ivesk() {
         }
     } while (Laik.egzas < 1 || Laik.egzas > 10);
 
-    Laik.rez = Laik.egzas*0.6 + double(sum)/double(Laik.paz.size())*0.4;
+    float mediana = sk_mediana(Laik.paz);
+
+    Laik.rez_vid = Laik.egzas*0.6 + double(sum)/double(Laik.paz.size())*0.4;
+    Laik.rez_med = Laik.egzas*0.6 + mediana*0.4;
     return Laik;
+}
+
+float sk_mediana(vector<int> paz) {
+    sort(paz.begin(), paz.end());
+    int n = paz.size();
+    if (n % 2 == 0) {
+        return (paz[n/2 - 1] + paz[n/2]) / 2.0;
+    } else {
+        return paz[n/2];
+    }
 }
