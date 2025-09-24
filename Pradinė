@@ -32,41 +32,121 @@ struct Studentas {
 float sk_mediana(vector<int> paz);
 Studentas ivesk();
 
+void rodyti_menu();
+void ivesti_rankiniu_budu(vector<Studentas>& Grupe);
+void ivesti_is_failo(vector<Studentas>& Grupe);
+void generuoti_atsitiktinius(vector<Studentas>& Grupe);
+void spausdinti_rezultatus(const vector<Studentas>& Grupe);
+
 // Pagrindinė programos funkcija
 int main() {
     vector<Studentas> Grupe;
-    int kiek;
+    int pasirinkimas;
     
-    // Tikriname studentų skaičiaus įvedimą
     while (true) {
-        cout<<"Kiek studentų yra grupėje? ";
-        if (cin >> kiek && kiek > 0) {
-            break; // teisingas įvedimas
+        rodyti_menu();
+        
+        cout << "Pasirinkite veiksmą (1-4): ";
+        if (cin >> pasirinkimas) {
+            switch (pasirinkimas) {
+                case 1:
+                    ivesti_rankiniu_budu(Grupe);
+                    break;
+                case 2:
+                    ivesti_is_failo(Grupe);
+                    break;
+                case 3:
+                    generuoti_atsitiktinius(Grupe);
+                    break;
+                case 4:
+                    cout << "Programa baigiama. Iki pasimatymo!\n";
+                    return 0;
+                default:
+                    cout << "Klaida: pasirinkite skaičių nuo 1 iki 4!\n\n";
+                    break;
+            }
+            
+            // Jei yra studentų duomenų, parodome rezultatus
+            if (!Grupe.empty()) {
+                spausdinti_rezultatus(Grupe);
+                
+                char testi;
+                cout << "\nAr norite tęsti darbą su programa? (t/n): ";
+                cin >> testi;
+                if (testi == 'n' || testi == 'N') {
+                    cout << "Programa baigiama.\n";
+                    break;
+                }
+                cout << "\n";
+            }
         } else {
-            cout<<"Klaida: studentų skaičius turi būti teigiamas skaičius! Įvesti dar kartą.\n";
+            cout << "Klaida: įveskite teisingą skaičių!\n\n";
             cin.clear(); // nuimam failbit
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // išvalom blogą įvestį
         }
     }
     
-    for (int j=0; j<kiek; j++) {
-        cout<<"Įveskite "<<j+1<<" studentą:\n";
-        Grupe.push_back(ivesk());
+    return 0;
+}
+
+void rodyti_menu() {
+    cout << "========================================\n";
+    cout << "Funkcijų meniu:\n";
+    cout << "1. Įvesti studentų rezultatus rankiniu būdu\n";
+    cout << "2. Įvesti studentų rezultatus iš txt failo\n";
+    cout << "3. Studentų rezultatus generuoti atsitiktinius\n";
+    cout << "4. Išeiti iš programos\n";
+    cout << "========================================\n";
+}
+
+void ivesti_rankiniu_budu(vector<Studentas>& Grupe) {
+    int kiek;
+    
+    // Tikriname studentų skaičiaus įvedimą
+    while (true) {
+        cout << "\nKiek studentų yra grupėje? ";
+        if (cin >> kiek && kiek > 0) {
+            break; // teisingas įvedimas
+        } else {
+            cout << "Klaida: studentų skaičius turi būti teigiamas skaičius! Įvesti dar kartą.\n";
+            cin.clear(); // nuimam failbit
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // išvalom blogą įvestį
+        }
     }
     
+    for (int j = 0; j < kiek; j++) {
+        cout << "Įveskite " << j + 1 << " studentą:\n";
+        Grupe.push_back(ivesk());
+    }
+}
+
+void ivesti_is_failo(vector<Studentas>& Grupe) {
+
+    cin.ignore();
+    cin.get();
+}
+
+void generuoti_atsitiktinius(vector<Studentas>& Grupe) {
+
+    cin.ignore();
+    cin.get();
+}
+
+void spausdinti_rezultatus(const vector<Studentas>& Grupe) {
+    cout << "           STUDENTŲ REZULTATAI          \n";
     cout << left << setw(15) << "Vardas"
-     << "| " << setw(15) << "Pavardė"
-     << "| " << right << setw(15) << "Galutinis (vid.)"
-     << " | " << setw(15) << "Galutinis (med.)"
-     << endl;
+         << "| " << setw(15) << "Pavardė"
+         << "| " << right << setw(15) << "Galutinis (vid.)"
+         << " | " << setw(15) << "Galutinis (med.)"
+         << endl;
     cout << std::string(65, '-') << endl; // atskyrimo linija
     
-    for (auto temp: Grupe)
+    for (auto temp : Grupe)
         cout << left << setw(15) << temp.vard
-         << "| " << setw(15) << temp.pav
-         << "| " << right << setw(15) << fixed << setprecision(2) << temp.rez_vid
-         << " | " << setw(15) << fixed << setprecision(2) << temp.rez_med
-         << endl;
+             << "| " << setw(15) << temp.pav
+             << "| " << right << setw(15) << fixed << setprecision(2) << temp.rez_vid
+             << " | " << setw(15) << fixed << setprecision(2) << temp.rez_med
+             << endl;
 }
 
 Studentas ivesk() {
