@@ -103,7 +103,7 @@ void rodyti_menu() {
     cout << "========================================\n";
     cout << "Funkcijų meniu:\n";
     cout << "1. Įvesti studentų rezultatus rankiniu būdu\n";
-    cout << "2. Įvesti studentų rezultatus iš txt failo\n";
+    cout << "2. Įvesti studentų rezultatus iš txt failo [Bus sukurta v0.1]\n";
     cout << "3. Studentų rezultatus generuoti atsitiktinius\n";
     cout << "4. Išeiti iš programos\n";
     cout << "========================================\n";
@@ -130,41 +130,8 @@ void ivesti_rankiniu_budu(vector<Studentas>& Grupe) {
 }
 
 void ivesti_is_failo(vector<Studentas>& Grupe) {
-    ifstream fin("studentai10000.txt");
-    if (!fin) {
-        cout << "Klaida: nepavyko atidaryti failo 'kursiokai.txt'!\n";
-        return;
-    }
-    string eilute;
-    bool antraste = true;
-    while (getline(fin, eilute)) {
-        if (eilute.empty()) continue;       // Praleidžiamos tuščios .txt failo eilutės
-        if (antraste) {                     // Praleidžiama antraštės eilutė
-            antraste = false;
-            continue;
-        }
-        istringstream iss(eilute);
-        Studentas st;
-        int pazymys, sum = 0;
-        iss >> st.vard >> st.pav;
-        st.paz.clear();
-
-        while (iss >> pazymys) {            // Skaitomi visi ND pažymiai iki paskutinio eilutės skaičiaus
-            st.paz.push_back(pazymys);
-        }
-
-        st.egzas = st.paz.back();           // Paskutinis eilutės skaičius yra egzamino pažymys
-        st.paz.pop_back();
-
-        // suskaičiuojama suma
-        for (int nd : st.paz) sum += nd;    // Suskaičiuojama pažymių suma
-        float mediana = sk_mediana(st.paz); // Apskaičiuojama mediana
-        st.rez_vid = st.egzas * 0.6 + double(sum) / double(st.paz.size()) * 0.4; // Apskaičiuojamas galutinis (vidurkis)
-        st.rez_med = st.egzas * 0.6 + mediana * 0.4; // Apskaičiuojamas galutinis (mediana)
-
-        Grupe.push_back(st);
-    }
-    cout << "Failas nuskaitytas sėkmingai. Įkelta " << Grupe.size() << " studentų.\n";
+    cin.ignore();
+    cin.get();
 }
 
 void generuoti_atsitiktinius(vector<Studentas>& Grupe) {
