@@ -144,7 +144,18 @@ void ivesti_is_failo(vector<Studentas>& Grupe) {
 
         istringstream iss(eilute);
         Studentas st;
+        int pazymys;
         iss >> st.vard >> st.pav;
+
+        st.paz.clear();
+        while (iss >> pazymys) {
+            st.paz.push_back(pazymys);
+        }
+
+        if (!st.paz.empty()) {
+            st.egzas = st.paz.back();
+            st.paz.pop_back();
+        }
 
         Grupe.push_back(st);
     }
