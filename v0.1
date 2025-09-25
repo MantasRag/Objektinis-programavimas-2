@@ -144,10 +144,10 @@ void ivesti_is_failo(vector<Studentas>& Grupe) {
 
         istringstream iss(eilute);
         Studentas st;
-        int pazymys;
+        int pazymys, sum = 0;
         iss >> st.vard >> st.pav;
-
         st.paz.clear();
+
         while (iss >> pazymys) {
             st.paz.push_back(pazymys);
         }
@@ -156,6 +156,11 @@ void ivesti_is_failo(vector<Studentas>& Grupe) {
             st.egzas = st.paz.back();
             st.paz.pop_back();
         }
+
+        for (int nd : st.paz) sum += nd;
+        float mediana = sk_mediana(st.paz);
+        st.rez_vid = st.egzas * 0.6 + double(sum) / double(st.paz.size()) * 0.4;
+        st.rez_med = st.egzas * 0.6 + mediana * 0.4;
 
         Grupe.push_back(st);
     }
