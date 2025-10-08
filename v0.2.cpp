@@ -29,6 +29,7 @@ using std::random_device;   // Atsitiktinių skaičių generatoriaus įvesta
 using std::mt19937;         // Mersenne Twister atsitiktinių skaičių generatorius
 using std::uniform_int_distribution;    // Atsitiktinių int skaičių paskirstymas
 using std::to_string;       // Konvertuoja skaičių į string
+using std::ofstream;        // Failų išvedimas
 
 // Aprašomas nuosavas duomenų tipas
 struct Studentas {
@@ -46,6 +47,7 @@ void ivesti_rankiniu_budu(vector<Studentas>& Grupe);
 void ivesti_is_failo(vector<Studentas>& Grupe);
 void generuoti_atsitiktinius(vector<Studentas>& Grupe);
 void spausdinti_rezultatus(const vector<Studentas>& Grupe, int skaiciavimo_metodas);
+void generuoti_i_txt();
 int pasirinkti_skaiciavimo_metoda();
 
 // Pagrindinė programos funkcija
@@ -57,7 +59,7 @@ int main() {
     while (true) {
         rodyti_menu();
         
-        cout << "Pasirinkite veiksmą (1-4): ";
+        cout << "Pasirinkite veiksmą (1-5): ";
         if (cin >> pasirinkimas) {
             switch (pasirinkimas) {
                 case 1:
@@ -70,10 +72,13 @@ int main() {
                     generuoti_atsitiktinius(Grupe);
                     break;
                 case 4:
+                    generuoti_i_txt();
+                    continue;                                                   // Grįžtame į meniu pradžią
+                case 5:
                     cout << "Programa baigta.\n";
                     return 0;
                 default:
-                    cout << "Klaida: pasirinkite skaičių nuo 1 iki 4!\n\n";
+                    cout << "Klaida: pasirinkite skaičių nuo 1 iki 5!\n\n";
                     break;
             }
             
@@ -92,8 +97,8 @@ int main() {
             }
         } else {
             cout << "Klaida: įveskite teisingą skaičių!\n\n";
-            cin.clear();                                                    // Nuima failbit
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Išvalo blogą įvestį
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
     return 0;
@@ -128,7 +133,8 @@ void rodyti_menu() {
     cout << "1. Įvesti studentų rezultatus rankiniu būdu\n";
     cout << "2. Įvesti studentų rezultatus iš txt failo\n";
     cout << "3. Studentų rezultatus generuoti atsitiktinius\n";
-    cout << "4. Išeiti iš programos\n";
+    cout << "4. Generuoti testavimo failus (5 failai)\n";
+    cout << "5. Išeiti iš programos\n";
     cout << "========================================\n";
 }
 
@@ -180,7 +186,6 @@ void ivesti_is_failo(vector<Studentas>& Grupe) {
             st.paz.pop_back();
         }
     
-
         for (int nd : st.paz) sum += nd;
         float mediana = sk_mediana(st.paz);
         st.rez_vid = st.egzas * 0.6 + double(sum) / double(st.paz.size()) * 0.4;
@@ -249,6 +254,67 @@ void generuoti_atsitiktinius(vector<Studentas>& Grupe) {
         Grupe.push_back(st);
     }
     cout << "Sukurta studentų: " << stud_skaicius << endl;
+}
+
+void generuoti_i_txt() {
+    int nd_skaicius;
+    
+    // Namų darbų skaičiaus įvedimas
+    while (true) {
+        cout << "\nKiek namų darbų pažymių generuoti kiekvienam studentui? ";
+        if (cin >> nd_skaicius && nd_skaicius > 0) {
+            break;
+        } else {
+            cout << "Klaida: namų darbų skaičius turi būti teigiamas skaičius! Įveskite dar kartą.\n";
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
+    
+    // Studentų kiekiai kiekvienam failui
+    vector<int> studentu_kiekiai = {1000, 10000, 100000, 1000000, 10000000};
+    
+    // Atsitiktinių skaičių generatoriaus nustatymas
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<int> pazymys_dis(1, 10);
+    
+    cout << "\nGeneruojami failai\n";
+    
+    // Generuojame kiekvieną failą
+    for (int stud_skaicius : studentu_kiekiai) {
+        string failo_vardas = "stud" + to_string(stud_skaicius) + ".txt";
+        ofstream fout(failo_vardas);
+        
+        if (!fout) {
+            cout << "Klaida: nepavyko sukurti failo '" << failo_vardas << "'!\n";
+            continue;
+        }
+        
+        // Įrašome antraštę
+        fout << left << setw(15) << "Vardas" << setw(15) << "Pavarde";
+        for (int i = 1; i <= nd_skaicius; i++) {
+            fout << setw(5) << ("ND" + to_string(i));
+        }
+        fout << setw(5) << "Egz." << "\n";
+        
+        // Generuojami studentai ir jų pažymiai
+        for (int i = 1; i <= stud_skaicius; i++) {                  //Vardas, pavardė
+            fout << left << setw(15) << ("Vardas" + to_string(i))
+                 << setw(15) << ("Pavarde" + to_string(i));
+            
+            for (int j = 0; j < nd_skaicius; j++) {                 //Namų darbų pažymiai
+                fout << setw(5) << pazymys_dis(gen);
+            }
+
+            fout << setw(5) << pazymys_dis(gen) << "\n";            // Egzamino įvertinimas
+        }
+        
+        fout.close();
+        cout << "Failas '" << failo_vardas << "' sukurtas (" << stud_skaicius << " studentų)\n";
+    }
+    
+    cout << "\nVisi failai sukurti.\n";
 }
 
 void spausdinti_rezultatus(const vector<Studentas>& Grupe, int skaiciavimo_metodas) {
