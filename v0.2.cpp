@@ -1,0 +1,382 @@
+// v0.2
+#include <iostream>         // Leidžia naudoti cin ir cout
+#include <iomanip>          // Leidžia formatuoti išvestį
+#include <vector>           // Leidžia įvesti vektorius
+#include <string>           // Leidžia įvesti string tipo kintamuosius
+#include <limits>           // Naudojama valyti įvesties srautą
+#include <algorithm>        // Leidžia naudoti sort funkciją
+#include <fstream>          // Reikalinga darbui su failais
+#include <sstream>          // Reikalinga string srautams
+#include <random>           // Reikalinga atsitiktinių skaičių generavimui
+#include <ctime>            // Reikalinga atsitiktinių skaičių generavimui
+
+using std::cout;            // Išvedimas
+using std::cin;             // Įvedimas
+using std::endl;            // Nauja eilutė
+using std::string;          // String tipo kintamieji
+using std::vector;          // Vektoriai
+using std::setw;            // Išvedimo metu nurodo plotį
+using std::left;            // Lygiavimas į kairę
+using std::right;           // Lygiavimas į dešinę
+using std::fixed;           // Fiksuotas kablelis
+using std::setprecision;    // Nustato skaičių po kablelio skaičių
+using std::sort;            // Rūšiavimas
+using std::istringstream;   // String stream
+using std::ifstream;        // Failų įvedimas
+using std::getline;         // Leidžia skaityti eilutes iš failo
+using std::istringstream;   // Leidžia konvertuoti string į kitus tipus
+using std::random_device;   // Atsitiktinių skaičių generatoriaus įvesta
+using std::mt19937;         // Mersenne Twister atsitiktinių skaičių generatorius
+using std::uniform_int_distribution;    // Atsitiktinių int skaičių paskirstymas
+using std::to_string;       // Konvertuoja skaičių į string
+
+// Aprašomas nuosavas duomenų tipas
+struct Studentas {
+    string vard;
+    string pav;
+    vector<int> paz;
+    int egzas;
+    float rez_vid, rez_med;
+};
+
+float sk_mediana(vector<int> paz);
+Studentas ivesk();
+void rodyti_menu();
+void ivesti_rankiniu_budu(vector<Studentas>& Grupe);
+void ivesti_is_failo(vector<Studentas>& Grupe);
+void generuoti_atsitiktinius(vector<Studentas>& Grupe);
+void spausdinti_rezultatus(const vector<Studentas>& Grupe, int skaiciavimo_metodas);
+int pasirinkti_skaiciavimo_metoda();
+
+// Pagrindinė programos funkcija
+int main() {
+    vector<Studentas> Grupe;
+    int pasirinkimas;
+    int skaiciavimo_metodas = pasirinkti_skaiciavimo_metoda();
+    
+    while (true) {
+        rodyti_menu();
+        
+        cout << "Pasirinkite veiksmą (1-4): ";
+        if (cin >> pasirinkimas) {
+            switch (pasirinkimas) {
+                case 1:
+                    ivesti_rankiniu_budu(Grupe);
+                    break;
+                case 2:
+                    ivesti_is_failo(Grupe);
+                    break;
+                case 3:
+                    generuoti_atsitiktinius(Grupe);
+                    break;
+                case 4:
+                    cout << "Programa baigta.\n";
+                    return 0;
+                default:
+                    cout << "Klaida: pasirinkite skaičių nuo 1 iki 4!\n\n";
+                    break;
+            }
+            
+            // Jei yra studentų duomenų, parodome rezultatus
+            if (!Grupe.empty()) {
+                spausdinti_rezultatus(Grupe, skaiciavimo_metodas);
+                
+                char testi;
+                cout << "\nAr norite tęsti darbą su programa? (t/n): ";
+                cin >> testi;
+                if (testi == 'n' || testi == 'N') {
+                    cout << "Programa baigiama.\n";
+                    break;
+                }
+                cout << "\n";
+            }
+        } else {
+            cout << "Klaida: įveskite teisingą skaičių!\n\n";
+            cin.clear();                                                    // Nuima failbit
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Išvalo blogą įvestį
+        }
+    }
+    return 0;
+}
+
+int pasirinkti_skaiciavimo_metoda() {
+    int metodas;
+    
+    cout << "========================================\n";
+    cout << "Pasirinkite galutinio pažymio skaičiavimo metodą:\n";
+    cout << "1. Naudoti vidurkį\n";
+    cout << "2. Naudoti medianą\n";
+    cout << "3. Rodyti abu (vidurkis ir mediana)\n";
+    cout << "========================================\n";
+    
+    while (true) {
+        cout << "Jūsų pasirinkimas (1-3): ";
+        if (cin >> metodas && metodas >= 1 && metodas <= 3) {
+            cout << "\n";
+            return metodas;
+        } else {
+            cout << "Klaida: pasirinkite skaičių nuo 1 iki 3!\n";
+            cin.clear();                                                    // Nuima failbit
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Išvalo blogą įvestį
+        }
+    }
+}
+
+void rodyti_menu() {
+    cout << "========================================\n";
+    cout << "Funkcijų meniu:\n";
+    cout << "1. Įvesti studentų rezultatus rankiniu būdu\n";
+    cout << "2. Įvesti studentų rezultatus iš txt failo\n";
+    cout << "3. Studentų rezultatus generuoti atsitiktinius\n";
+    cout << "4. Išeiti iš programos\n";
+    cout << "========================================\n";
+}
+
+void ivesti_rankiniu_budu(vector<Studentas>& Grupe) {
+    int kiek;
+    
+    // Tikriname studentų skaičiaus įvedimą
+    while (true) {
+        cout << "\nKiek studentų yra grupėje? ";
+        if (cin >> kiek && kiek > 0) {
+            break;                                                          // Teisingas įvedimas
+        } else {
+            cout << "Klaida: studentų skaičius turi būti teigiamas skaičius! Įvesti dar kartą.\n";
+            cin.clear();                                                    // Nuima failbit
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Išvalo blogą įvestį
+        }
+    }
+    for (int j = 0; j < kiek; j++) {
+        cout << "Įveskite " << j + 1 << " studentą:\n";
+        Grupe.push_back(ivesk());
+    }
+}
+
+void ivesti_is_failo(vector<Studentas>& Grupe) {
+    ifstream fin("studentai10000.txt");
+    if (!fin) {
+        cout << "Klaida: nepavyko atidaryti failo 'studentai10000.txt'!\n";
+        return;
+    }
+
+    string eilute;
+    bool antraste = true;
+    while (getline(fin, eilute)) {
+        if (eilute.empty()) continue;
+        if (antraste) { antraste = false; continue; }
+
+        istringstream iss(eilute);
+        Studentas st;
+        int pazymys, sum = 0;
+        iss >> st.vard >> st.pav;
+        st.paz.clear();
+
+        while (iss >> pazymys) {
+            st.paz.push_back(pazymys);
+        }
+
+        if (!st.paz.empty()) {
+            st.egzas = st.paz.back();
+            st.paz.pop_back();
+        }
+    
+
+        for (int nd : st.paz) sum += nd;
+        float mediana = sk_mediana(st.paz);
+        st.rez_vid = st.egzas * 0.6 + double(sum) / double(st.paz.size()) * 0.4;
+        st.rez_med = st.egzas * 0.6 + mediana * 0.4;
+
+        Grupe.push_back(st);
+    }
+
+    cout << "Failas nuskaitytas sėkmingai. Įkelta " << Grupe.size() << " studentų.\n";
+}
+
+void generuoti_atsitiktinius(vector<Studentas>& Grupe) {
+    int stud_skaicius, nd_skaicius;
+    
+    // Atsitiktinių skaičių generatoriaus nustatymas
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<int> pazymys_dis(1, 10);   // Pažymių diapazonas nuo 1 iki 10
+    
+    // Studentų skaičiaus įvedimas
+    while (true) {
+        cout << "\nKiek studentų generuoti? ";
+        if (cin >> stud_skaicius && stud_skaicius > 0) {
+            break;
+        } else {
+            cout << "Klaida: studentų skaičius turi būti teigiamas skaičius! Įveskite dar kartą.\n";
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
+    
+    // Namų darbų skaičiaus įvedimas
+    while (true) {
+        cout << "Kiek namų darbų pažymių generuoti kiekvienam studentui? ";
+        if (cin >> nd_skaicius && nd_skaicius > 0) {
+            break;
+        } else {
+            cout << "Klaida: namų darbų skaičius turi būti teigiamas skaičius! Įveskite dar kartą.\n";
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
+    
+    // Studentų duomenų generavimas
+    for (int i = 0; i < stud_skaicius; i++) {
+        Studentas st;
+        st.vard = "Vardas" + std::to_string(i + 1);
+        st.pav = "Pavarde" + std::to_string(i + 1);
+        
+        // Namų darbų pažymių generavimas
+        int sum = 0;
+        st.paz.clear();
+        for (int j = 0; j < nd_skaicius; j++) {
+            int pazymys = pazymys_dis(gen);
+            st.paz.push_back(pazymys);
+            sum += pazymys;
+        }
+        
+        st.egzas = pazymys_dis(gen);    // Egzamino pažymio generavimas
+        
+        // Galutinių rezultatų skaičiavimas
+        float mediana = sk_mediana(st.paz);
+        st.rez_vid = st.egzas * 0.6 + double(sum) / double(st.paz.size()) * 0.4;
+        st.rez_med = st.egzas * 0.6 + mediana * 0.4;
+        
+        Grupe.push_back(st);
+    }
+    cout << "Sukurta studentų: " << stud_skaicius << endl;
+}
+
+void spausdinti_rezultatus(const vector<Studentas>& Grupe, int skaiciavimo_metodas) {
+    // Rikiuojame pagal vardą
+    vector<Studentas> temp = Grupe; // kad galėtume rikiuoti, nes Grupe yra const
+    sort(temp.begin(), temp.end(), [](const Studentas &a, const Studentas &b) {
+        return a.vard < b.vard;
+    });
+
+    cout << "           STUDENTŲ REZULTATAI          \n";
+    
+    if (skaiciavimo_metodas == 1) {
+        // Tik vidurkis
+        cout << left << setw(15) << "Vardas"
+             << "| " << setw(15) << "Pavardė"
+             << "| " << right << setw(15) << "Galutinis (vid.)"
+             << endl;
+        cout << std::string(50, '-') << endl; // atskyrimo linija
+        
+        for (auto temp_st : temp)
+            cout << left << setw(15) << temp_st.vard
+                 << "| " << setw(15) << temp_st.pav
+                 << "| " << right << setw(15) << fixed << setprecision(2) << temp_st.rez_vid
+                 << endl;
+    }
+    else if (skaiciavimo_metodas == 2) {
+        // Tik mediana
+        cout << left << setw(15) << "Vardas"
+             << "| " << setw(15) << "Pavardė"
+             << "| " << right << setw(15) << "Galutinis (med.)"
+             << endl;
+        cout << std::string(50, '-') << endl; // atskyrimo linija
+        
+        for (auto temp_st : temp)
+            cout << left << setw(15) << temp_st.vard
+                 << "| " << setw(15) << temp_st.pav
+                 << "| " << right << setw(15) << fixed << setprecision(2) << temp_st.rez_med
+                 << endl;
+    }
+    else if (skaiciavimo_metodas == 3) {
+        // Abu - vidurkis ir mediana
+        cout << left << setw(15) << "Vardas"
+             << "| " << setw(15) << "Pavardė"
+             << "| " << right << setw(15) << "Galutinis (vid.)"
+             << " | " << setw(15) << "Galutinis (med.)"
+             << endl;
+        cout << std::string(70, '-') << endl; // atskyrimo linija
+        
+        for (auto temp_st : temp)
+            cout << left << setw(15) << temp_st.vard
+                 << "| " << setw(15) << temp_st.pav
+                 << "| " << right << setw(15) << fixed << setprecision(2) << temp_st.rez_vid
+                 << "  | " << setw(15) << fixed << setprecision(2) << temp_st.rez_med
+                 << endl;
+    }
+}
+
+Studentas ivesk() {
+    Studentas Laik;
+    int sum = 0;
+    
+    cout<<"Įveskite studento vardą: "; 
+    cin>>Laik.vard;
+    cout<<"Įveskite studento pavardę: "; 
+    cin>>Laik.pav;
+    
+    cin.ignore(); // išvalome naują eilutės simbolį po pavardės įvedimo
+    
+    cout << "Įveskite namų darbų pažymius (1-10). Norėdami baigti, spauskite ENTER tuščiai eilutei:\n";
+    
+    string line;
+    int pazymys_num = 1;
+    
+    while (true) {
+        cout << "Įveskite " << pazymys_num << " pažymį (arba ENTER jei baigėte): ";
+        getline(cin, line);
+        
+        // Jei įvesta tuščia eilutė, baigiame pažymių įvedimą
+        if (line.empty()) {
+            if (Laik.paz.empty()) {
+                cout << "Klaida: reikia įvesti bent vieną pažymį!\n";
+                continue;
+            }
+            break;
+        }
+        
+        // Bandome konvertuoti eilutę į skaičių
+        istringstream iss(line);
+        int pazymys;
+        
+        if (iss >> pazymys && iss.eof()) {              // Patikriname ar visas string'as buvo skaičius
+            if (pazymys >= 1 && pazymys <= 10) {
+                Laik.paz.push_back(pazymys);
+                sum += pazymys;
+                pazymys_num++;
+            } else {
+                cout << "Klaida: pažymys turi būti nuo 1 iki 10! Įveskite dar kartą.\n";
+            }
+        } else {
+            cout << "Klaida: įveskite teisingą skaičių (1-10) arba ENTER jei baigėte.\n";
+        }
+    }
+    
+    // Egzamino įvedimas
+    do {
+        cout<<"Įveskite egzamino rezultatą (1-10): ";
+        cin>>Laik.egzas;
+        if (Laik.egzas < 1 || Laik.egzas > 10) {
+            cout<<"Klaida: egzamino įvertinimas turi būti nuo 1 iki 10! Įvertinimą įvesti dar kartą.\n";
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    } while (Laik.egzas < 1 || Laik.egzas > 10);
+    
+    float mediana = sk_mediana(Laik.paz);
+    
+    Laik.rez_vid = Laik.egzas * 0.6 + double(sum) / double(Laik.paz.size()) * 0.4;
+    Laik.rez_med = Laik.egzas * 0.6 + mediana * 0.4;
+    
+    return Laik;
+}
+
+float sk_mediana(vector<int> paz) {
+    sort(paz.begin(), paz.end());
+    int n = paz.size();
+    if (n % 2 == 0) {
+        return (paz[n/2 - 1] + paz[n/2]) / 2.0;
+    } else {
+        return paz[n/2];
+    }
+}
