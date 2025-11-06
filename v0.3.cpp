@@ -33,16 +33,32 @@ int main() {
         cout << "Pasirinkite veiksma (1-7): ";
         if (cin >> pasirinkimas) {
             switch (pasirinkimas) {
-                case 1:
-                    ivesti_rankiniu_budu(Grupe);
-                    if (!Grupe.empty()) {
-                        skaiciuoti_rezultatus(Grupe, skaiciavimo_metodas);
-                        spausdinti_rezultatus(Grupe, skaiciavimo_metodas);
-                        arTestiDarba();
+                case 1: {
+                    int konteinerio_tipas = pasirinkti_konteinerio_tipa();
+                    
+                    if (konteinerio_tipas == 1) {
+                        // Vector konteineris
+                        vector<Studentas> GrupeVec;
+                        ivesti_rankiniu_budu(GrupeVec);
+                        if (!GrupeVec.empty()) {
+                            skaiciuoti_rezultatus(GrupeVec, skaiciavimo_metodas);
+                            spausdinti_rezultatus1(GrupeVec, skaiciavimo_metodas);
+                            arTestiDarba();
+                        }
+                    } else {
+                        // List konteineris
+                        list<Studentas> GrupeList;
+                        ivesti_rankiniu_budu(GrupeList);
+                        if (!GrupeList.empty()) {
+                            skaiciuoti_rezultatus(GrupeList, skaiciavimo_metodas);
+                            spausdinti_rezultatus1(GrupeList, skaiciavimo_metodas);
+                            arTestiDarba();
+                        }
                     }
                     break;
+                }
                 case 2:
-                    ivesti_is_failo(Grupe, "stud10000.txt");
+                    ivesti_is_failo(Grupe, "stud1000.txt");
                     if (!Grupe.empty()) {
                         skaiciuoti_rezultatus(Grupe, skaiciavimo_metodas);
                         spausdinti_rezultatus(Grupe, skaiciavimo_metodas);

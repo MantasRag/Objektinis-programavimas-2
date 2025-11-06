@@ -43,7 +43,7 @@ Studentas ivesk() {
                 sum += pazymys;
                 pazymys_num++;
             } else {
-                cout << "Klaida: pažymys turi būti nuo 1 iki 10! Įveskite dar kartą.\n";
+                cout << "Klaida: pažymys turi būti nuo 1 iki 10. Įveskite dar kartą.\n";
             }
         } else {
             cout << "Klaida: įveskite teisingą skaičių (1-10) arba ENTER jei baigėte.\n";
@@ -69,24 +69,20 @@ Studentas ivesk() {
     return Laik;
 }
 
-void ivesti_rankiniu_budu(vector<Studentas>& Grupe) {
-    int kiek;
+int pasirinkti_konteinerio_tipa() {
+    int tipas;
+    cout << "\nPasirinkite konteinerio tipą:\n";
+    cout << "1. Vector\n";
+    cout << "2. List\n";
+    cout << "Pasirinkimas: ";
     
-    // Tikriname studentų skaičiaus įvedimą
-    while (true) {
-        cout << "\nKiek studentu yra grupeje? ";
-        if (cin >> kiek && kiek > 0) {
-            break;                                                          // Teisingas įvedimas
-        } else {
-            cout << "Klaida: studentu skaičius turi buti teigiamas skaicius. Ivesti dar karta.\n";
-            cin.clear();                                                    // Nuima failbit
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Išvalo blogą įvestį
-        }
+    while (!(cin >> tipas) || (tipas != 1 && tipas != 2)) {
+        cout << "Klaida. Įveskite 1 arba 2\n";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Pasirinkimas: ";
     }
-    for (int j = 0; j < kiek; j++) {
-        cout << "Iveskite " << j + 1 << " studenta:\n";
-        Grupe.push_back(ivesk());
-    }
+    return tipas;
 }
 
 void ivesti_is_failo(vector<Studentas>& Grupe, const string& failo_vardas) {
