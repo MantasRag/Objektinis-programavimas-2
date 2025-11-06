@@ -99,76 +99,11 @@ int main() {
                     cout << "Generavimo laikas 10000000 studentu: " << duration_cast<milliseconds>(end_generavimas5 - start_generavimas5).count() / 1000.0 << " s\n\n";
                     break;
                 }
-                // case 5: {
-                //     if (skaiciavimo_metodas == 3) {
-                //         rikiavimo_budas(tipas1, tvarka);
-                //         tipas2 = dalijimo_budas();
-                //     }
-                    
-                //     //vector<string> failai = {"studentai10000.txt", "studentai100000.txt", "studentai1000000.txt"};
-                //     //vector<int> irasu_skaicius = {10000, 100000, 1000000};
-                //     vector<string> failai = {"stud1000.txt", "stud10000.txt", "stud100000.txt", "stud1000000.txt", "stud10000000.txt"};
-                //     vector<int> irasu_skaicius = {1000, 10000, 100000, 1000000, 10000000};
-                    
-                //     for (size_t i = 0; i < failai.size(); i++) {
-                //         Grupe.clear();
-                //         maziau5.clear();
-                //         daugiaulygu5.clear();
-                        
-                //         cout << "Testuojmas failas su " << irasu_skaicius[i] << " irasu\n";
-                        
-                //         auto start_ivedimas = high_resolution_clock::now();
-                //         ivesti_is_failo(Grupe, failai[i]);
-                //         auto end_ivedimas = high_resolution_clock::now();
-                        
-                //         skaiciuoti_rezultatus(Grupe, skaiciavimo_metodas);
-                    
-                //         auto start_rikiavimas = high_resolution_clock::now();
-                //         rusiuoti_studentus(Grupe, skaiciavimo_metodas, tipas1, tvarka);
-                //         auto end_rikiavimas = high_resolution_clock::now();
-                    
-                //         auto start_padalinimas = high_resolution_clock::now();
-                //         padalinti_i_grupes(Grupe, tipas2, maziau5, daugiaulygu5);
-                //         auto end_padalinimas = high_resolution_clock::now();
-                        
-                //         pav1 = pav1+to_string(i+1);
-                //         pav2 = pav2+to_string(i+1);
-
-                //         auto start_issaugojimas = high_resolution_clock::now();
-                //         issaugoti_i_txt(maziau5, pav1, skaiciavimo_metodas);
-                //         auto end_issaugojimas = high_resolution_clock::now();
-                        
-                //         auto start_issaugojimas2 = high_resolution_clock::now();
-                //         issaugoti_i_txt(daugiaulygu5, pav2, skaiciavimo_metodas);
-                //         auto end_issaugojimas2 = high_resolution_clock::now();
-                        
-                //         pav1 = "Maziau_5_";
-                //         pav2 = "Daugiau_lygu_5_";
-
-                //         double ivedimo_laikas = duration_cast<milliseconds>(end_ivedimas - start_ivedimas).count() / 1000.0;
-                //         double rikiavimo_laikas = duration_cast<milliseconds>(end_rikiavimas - start_rikiavimas).count() / 1000.0;
-                //         double padalinimo_laikas = duration_cast<milliseconds>(end_padalinimas - start_padalinimas).count() / 1000.0;
-                //         double issaugojimo_laikas = duration_cast<milliseconds>(end_issaugojimas - start_issaugojimas).count() / 1000.0;
-                //         double issaugojimo2_laikas = duration_cast<milliseconds>(end_issaugojimas2 - start_issaugojimas2).count() / 1000.0;
-                //         double bendras_laikas = ivedimo_laikas + rikiavimo_laikas + padalinimo_laikas + 
-                //                             issaugojimo_laikas + issaugojimo2_laikas;
-                        
-                //         cout << fixed << setprecision(3);
-                //         cout << "  Failo su " << irasu_skaicius[i] << " irasu nuskaitymo laikas: " << ivedimo_laikas << " s\n";
-                //         cout << "  " << irasu_skaicius[i] << " irasu rikiavimo laikas: " << rikiavimo_laikas << " s\n";
-                //         cout << "  " << irasu_skaicius[i] << " irasu padalinimo i grupes laikas: " << padalinimo_laikas << " s\n";
-                //         cout << "  Issaugojimo i faila (maziau 5) laikas " << irasu_skaicius[i] << " irasu: " << issaugojimo_laikas << " s\n";
-                //         cout << "  Issaugojimo i faila (daugiau/lygu 5) laikas " << irasu_skaicius[i] << " irasu: " << issaugojimo2_laikas << " s\n";
-                //         cout << "  " << irasu_skaicius[i] << " irasu bendras laikas: " << bendras_laikas << " s\n\n";
-                //     }
-                //     arTestiDarba();
-                //     break;
-                // }
-                case 6:
+                case 5:
                     testuoti_konteinerius(skaiciavimo_metodas);
                     arTestiDarba();
                     break;
-                case 7:
+                case 6:
                     cout << "Programa baigta.\n";
                     return 0;
                 default:
