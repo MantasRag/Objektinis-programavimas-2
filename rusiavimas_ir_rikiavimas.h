@@ -7,16 +7,21 @@
 
 void rikiavimo_budas(int &tipas, int &tvarka);
 int dalijimo_budas();
-int pasirinkti_strategija();
+int pasirinkti_strategija(); // Funkcija strategijos pasirinkimui
 
-//  Template funkcijos rikiavimui ir grupavimui (kad veiktų ir su vector ir su list)
+// Helper funkcija, tikrina ar studentas yra vargšas (galutinis įvertinimas < 5)
+inline bool ar_vargsiukas(const Studentas& st, int tipas) {
+    float rezultatas = (tipas == 1 ? st.rez_vid : st.rez_med);
+    return rezultatas < 5.0f;
+}
+
+//  Template funkcijos rikiavimui
 template <typename Container>
 void rusiuoti_studentus(Container& Grupe, int skaiciavimo_metodas, int tipas, int tvarka) {
     if (Grupe.empty()) {
         std::cout << "Klaida. Studentu vektorius tuscias.\n";
         return;
     }
-    // Rikiavimas pagal tipą ir tvarką
     if (skaiciavimo_metodas == 1 || (skaiciavimo_metodas == 3 && tipas == 1)) {
         if (tvarka == 1)
             Grupe.sort([](const Studentas& a, const Studentas& b) { return a.rez_vid < b.rez_vid; });
@@ -30,7 +35,7 @@ void rusiuoti_studentus(Container& Grupe, int skaiciavimo_metodas, int tipas, in
     }
 }
 
-// Funkcija ruosiuoti duomenis iš vektorių naudojanti std::sort
+// Specializacija vektoriui
 template <>
 inline void rusiuoti_studentus<std::vector<Studentas>>(std::vector<Studentas>& Grupe, 
                                                         int skaiciavimo_metodas, int tipas, int tvarka) {
@@ -55,8 +60,7 @@ inline void rusiuoti_studentus<std::vector<Studentas>>(std::vector<Studentas>& G
     }
 }
 
-// 1 startegija
-// 
+// 1 STRATEGIJA - COPY+PASTE į du skirtingus failus
 template <typename Container>
 void padalinti_i_grupes_strategija1(const Container& Grupe, int tipas,
                         Container& maziau5, Container& daugiaulygu5) {
@@ -82,9 +86,7 @@ void padalinti_i_grupes_strategija1(const Container& Grupe, int tipas,
     std::cout << "Studentu su >= 5: " << daugiaulygu5.size() << std::endl;
 }
 
-// 2 staretgija
-
-// Bendras template paskelbimas
+// 2 STRATEGIJA - Studentai iškerpami iš pradinio konteinerio ir perkeliami į naują
 template <typename Container>
 void padalinti_i_grupes_strategija2(Container& Grupe, int tipas,
                         Container& maziau5, Container& daugiaulygu5);
@@ -124,7 +126,7 @@ inline void padalinti_i_grupes_strategija2<std::vector<Studentas>>(
     std::cout << "Studentu su >= 5: " << daugiaulygu5.size() << std::endl;
 }
 
-// LIST
+// List'ams
 template <>
 inline void padalinti_i_grupes_strategija2<std::list<Studentas>>(
     std::list<Studentas>& Grupe,
@@ -159,7 +161,38 @@ inline void padalinti_i_grupes_strategija2<std::list<Studentas>>(
     std::cout << "Studentu su >= 5: " << daugiaulygu5.size() << std::endl;
 }
 
-// Bendras template paskelbimas strategijai 2
+// 3 STRATEGIJA
+// Vektoriui naudojama patobulinta pirma startegija
+// List'ui naudojama patobulinta antra strategija
 template <typename Container>
-void padalinti_i_grupes_strategija2(Container& Grupe, int tipas,
+void padalinti_i_grupes_strategija3(Container& Grupe, int tipas,
                         Container& maziau5, Container& daugiaulygu5);
+
+// Vektoriams
+template <>
+inline void padalinti_i_grupes_strategija3<std::vector<Studentas>>(
+    std::vector<Studentas>& Grupe,
+    int tipas,
+    std::vector<Studentas>& maziau5,
+    std::vector<Studentas>& daugiaulygu5) 
+{
+    if (Grupe.empty()) {
+        std::cout << "Klaida. Studentų vektorius tuščias.\n";
+        return;
+    }
+
+    maziau5.clear();
+    daugiaulygu5.clear();
+
+    auto riba = std::stable_partition(Grupe.begin(), Grupe.end(),
+        [tipas](const Studentas& st) { return ar_vargsiukas(st, tipas); });
+    
+    maziau5.assign(Grupe.begin(), riba);
+    daugiaulygu5.assign(riba, Grupe.end());
+    
+    std::cout << "\n[STRATEGIJA 3] Studentai suskirstyti i grupes pagal " 
+              << (tipas == 1 ? "vidurkis" : "mediana") << "):\n";
+    std::cout << "Studentu su < 5: " << maziau5.size() << std::endl;
+    std::cout << "Studentu su >= 5: " << daugiaulygu5.size() << std::endl;
+}
+
