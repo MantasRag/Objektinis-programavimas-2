@@ -9,12 +9,6 @@ void rikiavimo_budas(int &tipas, int &tvarka);
 int dalijimo_budas();
 int pasirinkti_strategija(); // Funkcija strategijos pasirinkimui
 
-// Helper funkcija, tikrina ar studentas yra vargšas (galutinis įvertinimas < 5)
-inline bool ar_vargsiukas(const Studentas& st, int tipas) {
-    float rezultatas = (tipas == 1 ? st.rez_vid : st.rez_med);
-    return rezultatas < 5.0f;
-}
-
 //  Template funkcijos rikiavimui
 template <typename Container>
 void rusiuoti_studentus(Container& Grupe, int skaiciavimo_metodas, int tipas, int tvarka) {
@@ -162,7 +156,7 @@ inline void padalinti_i_grupes_strategija2<std::list<Studentas>>(
 }
 
 // 3 STRATEGIJA
-// Vektoriui naudojama patobulinta pirma startegija
+// Vektoriui naudojama patobulinta pirma strategija
 // List'ui naudojama patobulinta antra strategija
 template <typename Container>
 void padalinti_i_grupes_strategija3(Container& Grupe, int tipas,
@@ -185,7 +179,10 @@ inline void padalinti_i_grupes_strategija3<std::vector<Studentas>>(
     daugiaulygu5.clear();
 
     auto riba = std::stable_partition(Grupe.begin(), Grupe.end(),
-        [tipas](const Studentas& st) { return ar_vargsiukas(st, tipas); });
+        [tipas](const Studentas& st) { 
+            float rezultatas = (tipas == 1 ? st.rez_vid : st.rez_med);
+            return rezultatas < 5.0f;
+        });
     
     maziau5.assign(Grupe.begin(), riba);
     daugiaulygu5.assign(riba, Grupe.end());
@@ -196,3 +193,37 @@ inline void padalinti_i_grupes_strategija3<std::vector<Studentas>>(
     std::cout << "Studentu su >= 5: " << daugiaulygu5.size() << std::endl;
 }
 
+// List'ams
+template <>
+inline void padalinti_i_grupes_strategija3<std::list<Studentas>>(
+    std::list<Studentas>& Grupe,
+    int tipas,
+    std::list<Studentas>& maziau5,
+    std::list<Studentas>& daugiaulygu5) 
+{
+    if (Grupe.empty()) {
+        std::cout << "Klaida. Studentų sąrašas tuščias.\n";
+        return;
+    }
+
+    maziau5.clear();
+    daugiaulygu5.clear();
+
+    auto it = Grupe.begin();
+    while (it != Grupe.end()) {
+        float rezultatas = (tipas == 1 ? it->rez_vid : it->rez_med);
+        if (rezultatas < 5.0f) {
+            maziau5.push_back(*it);
+            it = Grupe.erase(it);
+        } else {
+            ++it;
+        }
+    }
+    
+    daugiaulygu5 = Grupe;
+    
+    std::cout << "\n[STRATEGIJA 3] Studentai suskirstyti i grupes pagal " 
+              << (tipas == 1 ? "vidurkis" : "mediana") << "):\n";
+    std::cout << "Studentu su < 5: " << maziau5.size() << std::endl;
+    std::cout << "Studentu su >= 5: " << daugiaulygu5.size() << std::endl;
+}
