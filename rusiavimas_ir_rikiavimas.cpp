@@ -45,7 +45,7 @@ int pasirinkti_strategija() {
     int strategija;
     cout << "\nPASIRINKITE STRATEGIJA\n";
     cout << "1. STRATEGIJA 1 - Kopijuojami iš pagrindinio į du kitus konteinerius (Copy+Paste)\n\n";
-    cout << "2. STRATEGIJA 2 - Cut+Paste Iskerpama is pagrindinio i nauja konteineri (Cut+Paste)\n\n";
+    cout << "2. STRATEGIJA 2 - Iskerpama is pagrindinio i nauja konteineri (Cut+Paste)\n\n";
     cout << "Pasirinkite strategija (1 arba 2): ";
     
     while (!(cin >> strategija) || (strategija != 1 && strategija != 2)) {
