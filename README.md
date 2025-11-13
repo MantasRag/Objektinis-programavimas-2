@@ -1,6 +1,52 @@
 # Objektinis programavimas
 
 ## 1. Visų versijų aprašai
+### v0.1
+Šis projektas yra C++ programa, skirta studentų namų darbų ir egzamino rezultatų tvarkymui bei galutinio balo apskaičiavimui. Projektas realizuotas pagal užduoties reikalavimus su „v.pradinė“ ir „v0.1“ versijomis.
+
+Programa leidžia:
+1. Duomenų įvedimą: studentų vardus ir pavardes (string tipo); namų darbų rezultatus ir egzamino įvertinimą (int tipo); namų darbų skaičius nėra ribojamas, studentai gali įvesti tiek, kiek reikia.
+2. Galutinio balo skaičiavimą: pagal vidurkį; pagal medianą.
+3. Galimybė pasirinkti, kaip bus skaičiuojamas galutinis įvertinimas: pagal vidurkį, medianą arba bus išvedami abu.
+4. Duomenų saugojimą: visi studentų įrašai saugomi std::vector konteineryje; namų darbų rezultatai saugomi kaip vektorius kiekvieno studento struktūroje.
+5. Atsitiktinių rezultatų generavimas: programa gali generuoti atsitiktinius studentų balus už namų darbus ir egzaminą.
+6. Failų skaitymas ir įrašymas: galima įvesti studentų duomenis iš failo (pvz., kursiokai.txt).
+
+Išvedimas rodomas tvarkingai išlygintu formatu.
+Studentai gali būti surikiuoti pagal vardą arba pavardę abėcėlės didėjimo/mažėjimo.
+
+### v0.2
+Ši projekto versija (v0.2) yra v0.1 patobulinimas, skirtas dideliems studentų duomenų masyvams, failų generavimui ir spartumo analizei. Programa realizuota C++ kalba su std::vector, struct ir failų operacijomis. Projektas organizuotas keliuose .cpp ir .h failuose, kad būtų patogu palaikyti ir plėsti kodą.
+
+Nauji funkcionalumai v0.2:
+1. Atsitiktinių duomenų generavimas dideliems failams. Sugeneruoti penki studentų sąrašai su įrašų skaičiumi: 1 000, 10 000, 100 000, 1 000 000, 10 000 000. Vardai ir pavardės generuojami šabloniškai: Vardas1 Pavarde1, Vardas2 Pavarde2 ir t.t. Namų darbų ir egzamino balai generuojami atsitiktinai.
+2. Studentų rūšiavimas pagal galutinį balą: studentai, kurių galutinis balas < 5, priskiriami "vargšiukų" kategorijai; studentai, kurių galutinis balas >= 5.0, priskiriami „kietiakių“ kategorijai. Surūšiuoti studentai išvedami į du naujus failus pagal kategorijas.
+3. Atliktas kodo reorganizavimas (refactoring).
+4. Atlikti programos veikimo spartos matavimai kiekvienam veiksmui: nuskaitymas, skaičiavimas, rikiavimas, padalinimas, išvedimai ir bendras laikas.
+
+### v0.3
+Ši versija (v0.3) yra v0.2 patobulinimas, skirtas konteinerių palyginimui ir programos spartos analizei. Programa realizuota C++ kalba, naudojant std::vector ir std::list studentų saugojimui, kad būtų įvertinta konteinerių įtaka veikimo greičiui.
+
+Naujas funkcionalumas v0.3
+1. Konteinerių testavimas: programoje studentų sąrašas gali būti saugomas tiek kaip std::vector<Student>, tiek kaip std::list<Student>.
+2. Testavimas atliekamas su tais pačiais failais, kurie buvo naudojami v0.2: 1 000 įrašų, 10 000 įrašų, 100 000 įrašų, 1 000 000 įrašų, 10 000 000 įrašų.
+3. Spartos matavimas: laikas matuojamas naudojant std::chrono biblioteką.
+4. Rezultatai pateikiami README faile lentelėse, nurodant konteinerio tipą ir kiekvieno veiksmo trukmę.
+
+### v1.0
+Ši versija (v1.0) yra v0.3 patobulinimas, skirtas studentų dalijimo į kategorijas („vargšiukai“ ir „kietiakiai“) optimizavimui ir spartos analizei.
+
+#### Nauji funkcionalumai.
+
+Studentų dalijimo strategijos palyginimas:
+* Strategija 1: Daugialypis kopijavimas – bendras studentų konteineris paliekamas, studentai nukopijuojami į atskirus „vargšiukų“ ir „kietiakių“ konteinerius.
+* Strategija 2: Vienas naujas konteineris – „vargšiukai“ nukeliauja į naują konteinerį, o bendrame konteineryje lieka tik „kietiakai“.
+* Strategija 3: Optimizuota strategija – panaudojami efektyvūs algoritmai (std::partition, std::remove_if, std::copy_if ir kt.) darbo su std::vector ir std::list spartinimui.
+
+Efektyvumo matavimas:
+* Išmatuojamas laikas visoms trims strategijoms, tiek std::vector, tiek std::list konteineriams.
+
+Programos struktūra leidžia lengvai keisti konteinerį ir strategiją.
 
 ## 2. Programos naudojimosi instrukcija
 ### Pirmas žingsnis: Skaičiavimo metodo pasirinkimas.
