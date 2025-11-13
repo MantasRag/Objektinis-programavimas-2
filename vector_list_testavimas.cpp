@@ -15,15 +15,15 @@ void testuoti_konteinerius(int skaiciavimo_metodas) {
     else if (pasirinkimas == 2) konteinerio_pasirinkimas = "list";
     else konteinerio_pasirinkimas = "abu";
 
-    // Pasirinkti strategiją
+    // NAUJAS KODAS - Pasirinkti strategiją
     int strategija = pasirinkti_strategija();
 
     // Failai testavimui
     // vector<string> failai = {"stud1000.txt","stud10000.txt","stud100000.txt","stud1000000.txt"};
     // vector<int> irasai = {1000,10000,100000,1000000};
 
-    vector<string> failai = {"stud10000.txt"};
-    vector<int> irasai = {10000};
+    vector<string> failai = {"stud1000000.txt"};
+    vector<int> irasai = {1000000};
 
     if (konteinerio_pasirinkimas == "vector") {
         testuoti<vector<Studentas>>(failai, irasai, skaiciavimo_metodas, "vector", strategija);

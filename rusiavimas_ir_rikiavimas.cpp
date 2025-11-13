@@ -46,10 +46,11 @@ int pasirinkti_strategija() {
     cout << "\nPASIRINKITE STRATEGIJA\n";
     cout << "1. STRATEGIJA 1 - Kopijuojami iš pagrindinio į du kitus konteinerius (Copy+Paste)\n\n";
     cout << "2. STRATEGIJA 2 - Iskerpama is pagrindinio i nauja konteineri (Cut+Paste)\n\n";
-    cout << "Pasirinkite strategija (1 arba 2): ";
+    cout << "3. STRATEGIJA 3 - Optimizuota naudojant greitesnius algoritmus\n";
+    cout << "Pasirinkite strategija (1-3): ";
     
-    while (!(cin >> strategija) || (strategija != 1 && strategija != 2)) {
-        cout << "Klaida. Iveskite 1 arba 2: ";
+    while (!(cin >> strategija) || (strategija < 1 || strategija > 3)) {
+        cout << "Klaida. Iveskite 1, 2 arba 3: ";
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }

@@ -5,7 +5,7 @@
 #include <iostream>
 #include "studentas.h"
 
-using namespace std; // ⚠️ DĖMESIO: nenaudok header failuose didesniuose projektuose
+using namespace std;
 
 void rikiavimo_budas(int &tipas, int &tvarka);
 int dalijimo_budas();

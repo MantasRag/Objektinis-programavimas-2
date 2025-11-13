@@ -50,8 +50,10 @@ void testuoti(const vector<string>& failai, const vector<int>& irasu_skaicius,
         if (strategija == 1) {
             const Container& GrupeConst = Grupe;
             padalinti_i_grupes_strategija1(GrupeConst, tipas2, maziau5, daugiaulygu5);
-        } else {
+        } else if (strategija == 2) {
             padalinti_i_grupes_strategija2(Grupe, tipas2, maziau5, daugiaulygu5);
+        } else if (strategija == 3) {
+            padalinti_i_grupes_strategija3(Grupe, tipas2, maziau5, daugiaulygu5);
         }
         auto end_padalinimas = high_resolution_clock::now();
 
