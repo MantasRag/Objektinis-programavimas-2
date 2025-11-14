@@ -33,3 +33,10 @@ void Studentas::skaiciuotiRezultatus(int metodas, float mediana) {
     }
 }
 
+bool lygintiVid(const Studentas& a, const Studentas& b) {
+    return a.rez_vid() < b.rez_vid();
+}
+
+bool lygintiMed(const Studentas& a, const Studentas& b) {
+    return a.rez_med() < b.rez_med();
+}
