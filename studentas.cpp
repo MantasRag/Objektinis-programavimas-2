@@ -20,3 +20,16 @@ void Studentas::addPazymys(int pazymys) { paz_.push_back(pazymys); }
 void Studentas::setRezVid(float vid) { rez_vid_ = vid; }
 void Studentas::setRezMed(float med) { rez_med_ = med; }
 void Studentas::clearPaz() { paz_.clear(); }
+
+// Galutinio įvertinimo skaičiavimas
+void Studentas::skaiciuotiRezultatus(int metodas, float mediana) {
+    if ((metodas == 1 || metodas == 3) && !paz_.empty()) {
+        int sum = 0;
+        for (int nd : paz_) sum += nd;
+        rez_vid_ = egzas_ * 0.6f + (float(sum) / paz_.size()) * 0.4f;
+    }
+    if ((metodas == 2 || metodas == 3) && !paz_.empty()) {
+        rez_med_ = egzas_ * 0.6f + mediana * 0.4f;
+    }
+}
+
