@@ -35,6 +35,9 @@ public:
     
     // Member funkcija rezultatų skaičiavimui
     void skaiciuotiRezultatus(int metodas, float mediana);
+
+    // Destruktorius
+    ~Studentas();
 };
 
 bool lygintiVid(const Studentas& a, const Studentas& b);

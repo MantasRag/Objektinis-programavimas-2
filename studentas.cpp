@@ -33,6 +33,17 @@ void Studentas::skaiciuotiRezultatus(int metodas, float mediana) {
     }
 }
 
+// Destruktorius
+Studentas::~Studentas() {
+    vard_.clear();
+    pav_.clear();
+    paz_.clear();
+    egzas_ = 0;
+    rez_vid_ = 0.0f;
+    rez_med_ = 0.0f;
+}
+
+
 bool lygintiVid(const Studentas& a, const Studentas& b) {
     return a.rez_vid() < b.rez_vid();
 }
