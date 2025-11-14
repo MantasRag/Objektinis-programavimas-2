@@ -11,28 +11,26 @@
 using namespace std;
 
 int kiek_generuoti() {
-                int nd_skaicius;
-                while (true) {
-                    cout << "\nKiek namu darbu pazymiu generuoti kiekvienam studentui? ";
-                    if (cin >> nd_skaicius && nd_skaicius > 0) {
-                        return nd_skaicius;
-                    } else {
-                        cout << "Klaida: iveskite teigiama skaicių\n";
-                        cin.clear();
-                        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                        }
-                    }
-                }
+    int nd_skaicius;
+    while (true) {
+        cout << "\nKiek namu darbu pazymiu generuoti kiekvienam studentui? ";
+        if (cin >> nd_skaicius && nd_skaicius > 0) {
+            return nd_skaicius;
+        } else {
+            cout << "Klaida: iveskite teigiama skaicių\n";
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
+}
 
 void generuoti_atsitiktinius(vector<Studentas>& Grupe) {
     int stud_skaicius, nd_skaicius;
     
-    // Atsitiktinių skaičių generatoriaus nustatymas
     random_device rd;
     mt19937 gen(rd());
-    uniform_int_distribution<int> pazymys_dis(1, 10);   // Pažymių diapazonas nuo 1 iki 10
+    uniform_int_distribution<int> pazymys_dis(1, 10);
     
-    // Studentų skaičiaus įvedimas
     while (true) {
         cout << "\nKiek studentu generuoti? ";
         if (cin >> stud_skaicius && stud_skaicius > 0) {
@@ -44,7 +42,6 @@ void generuoti_atsitiktinius(vector<Studentas>& Grupe) {
         }
     }
     
-    // Namų darbų skaičiaus įvedimas
     while (true) {
         cout << "Kiek namu darbu pazymiu generuoti kiekvienam studentui? ";
         if (cin >> nd_skaicius && nd_skaicius > 0) {
@@ -56,22 +53,17 @@ void generuoti_atsitiktinius(vector<Studentas>& Grupe) {
         }
     }
     
-    // Studentų duomenų generavimas
     for (int i = 0; i < stud_skaicius; i++) {
         Studentas st;
-        st.vard = "Vardas" + std::to_string(i + 1);
-        st.pav = "Pavarde" + std::to_string(i + 1);
+        st.setVard("Vardas" + std::to_string(i + 1));
+        st.setPav("Pavarde" + std::to_string(i + 1));
         
-        // Namų darbų pažymių generavimas
-        int sum = 0;
-        st.paz.clear();
         for (int j = 0; j < nd_skaicius; j++) {
             int pazymys = pazymys_dis(gen);
-            st.paz.push_back(pazymys);
-            sum += pazymys;
+            st.addPazymys(pazymys);
         }
         
-        st.egzas = pazymys_dis(gen);    // Egzamino pažymio generavimas
+        st.setEgzas(pazymys_dis(gen));
         Grupe.push_back(st);
     }
     cout << "Sukurta studentu: " << stud_skaicius << endl;

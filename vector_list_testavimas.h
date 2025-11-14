@@ -16,6 +16,13 @@ using namespace std::chrono;
 
 template <typename Container>
 void testuoti(const vector<string>& failai, const vector<int>& irasu_skaicius, 
+              int skaiciavimo_metodas, const string& konteinerio_tipas, int strategija);
+
+void testuoti_konteinerius(int skaiciavimo_metodas);
+
+// Template implementacija
+template <typename Container>
+void testuoti(const vector<string>& failai, const vector<int>& irasu_skaicius, 
               int skaiciavimo_metodas, const string& konteinerio_tipas, int strategija) {
     cout << "\nTESTUOJAMAS KONTEINERIS: " << konteinerio_tipas << "\n";
     cout << "STRATEGIJA: " << strategija << "\n\n";
@@ -89,5 +96,3 @@ void testuoti(const vector<string>& failai, const vector<int>& irasu_skaicius,
              << "BENDRAS LAIKAS: " << bendras << " s\n\n";
     }
 }
-
-void testuoti_konteinerius(int skaiciavimo_metodas);

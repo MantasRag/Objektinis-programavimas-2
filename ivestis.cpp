@@ -7,16 +7,23 @@
 #include <string>
 #include <limits>
 
+
 using namespace std;
 
 Studentas ivesk() {
     Studentas Laik;
-    int sum = 0;
-    cout<<"Įveskite studento vardą: "; 
-    cin>>Laik.vard;
-    cout<<"Įveskite studento pavardę: "; 
-    cin>>Laik.pav;
-    cin.ignore(); // išvalome naują eilutės simbolį po pavardės įvedimo
+    
+    string vardas, pavarde;
+    cout << "Įveskite studento vardą: "; 
+    cin >> vardas;
+    Laik.setVard(vardas);
+    
+    cout << "Įveskite studento pavardę: "; 
+    cin >> pavarde;
+    Laik.setPav(pavarde);
+    
+    cin.ignore();
+    
     cout << "Įveskite namų darbų pažymius (1-10). Norėdami baigti, spauskite ENTER tuščiai eilutei:\n";
     string line;
     int pazymys_num = 1;
@@ -25,9 +32,8 @@ Studentas ivesk() {
         cout << "Įveskite " << pazymys_num << " pažymį (arba ENTER jei baigėte): ";
         getline(cin, line);
         
-        // Jei įvesta tuščia eilutė, baigiame pažymių įvedimą
         if (line.empty()) {
-            if (Laik.paz.empty()) {
+            if (Laik.paz().empty()) {
                 cout << "Klaida: reikia įvesti bent vieną pažymį!\n";
                 continue;
             }
@@ -37,10 +43,9 @@ Studentas ivesk() {
         istringstream iss(line);
         int pazymys;
         
-        if (iss >> pazymys && iss.eof()) {              // Patikriname ar visas string'as buvo skaičius
+        if (iss >> pazymys && iss.eof()) {
             if (pazymys >= 1 && pazymys <= 10) {
-                Laik.paz.push_back(pazymys);
-                sum += pazymys;
+                Laik.addPazymys(pazymys);
                 pazymys_num++;
             } else {
                 cout << "Klaida: pažymys turi būti nuo 1 iki 10. Įveskite dar kartą.\n";
@@ -50,21 +55,30 @@ Studentas ivesk() {
         }
     }
     
-    // Egzamino įvedimas
+    int egzaminas;
     do {
-        cout<<"Iveskite egzamino rezultata (1-10): ";
-        cin>>Laik.egzas;
-        if (Laik.egzas < 1 || Laik.egzas > 10) {
-            cout<<"Klaida: egzamino ivertinimas turi būti nuo 1 iki 10. Ivertinima ivesti dar karta.\n";
+        cout << "Iveskite egzamino rezultata (1-10): ";
+        cin >> egzaminas;
+        if (egzaminas < 1 || egzaminas > 10) {
+            cout << "Klaida: egzamino ivertinimas turi būti nuo 1 iki 10. Ivertinima ivesti dar karta.\n";
             cin.clear();
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
-    } while (Laik.egzas < 1 || Laik.egzas > 10);
+    } while (egzaminas < 1 || egzaminas > 10);
     
-    float mediana = sk_mediana(Laik.paz);
+    Laik.setEgzas(egzaminas);
     
-    Laik.rez_vid = Laik.egzas * 0.6 + double(sum) / double(Laik.paz.size()) * 0.4;
-    Laik.rez_med = Laik.egzas * 0.6 + mediana * 0.4;
+    // Skaičiuojame rezultatus
+    std::vector<int> paz_copy = Laik.paz();
+    float mediana = sk_mediana(paz_copy);
+    
+    int sum = 0;
+    for (int nd : Laik.paz()) sum += nd;
+    float rez_vid = egzaminas * 0.6f + float(sum) / Laik.paz().size() * 0.4f;
+    float rez_med = egzaminas * 0.6f + mediana * 0.4f;
+    
+    Laik.setRezVid(rez_vid);
+    Laik.setRezMed(rez_med);
     
     return Laik;
 }
@@ -94,7 +108,7 @@ void ivesti_is_failo(vector<Studentas>& Grupe, const string& failo_vardas) {
 
     string eilute;
     Grupe.clear();
-    Grupe.reserve(1000000);                     // Iš anksto rezervuoja vietą (spartesniam nuskaitymui)
+    Grupe.reserve(1000000);
 
     bool pirma_eilute = true;
     int kiek_stud = 0;
@@ -104,21 +118,20 @@ void ivesti_is_failo(vector<Studentas>& Grupe, const string& failo_vardas) {
         if (eilute.empty()) continue;
 
         Studentas st;
-        st.paz.clear();
 
         const char* p = eilute.c_str();
         // Vardas
         while (*p == ' ') ++p;
         const char* q = p;
         while (*q && *q != ' ') ++q;
-        st.vard.assign(p, q - p);
+        st.setVard(string(p, q - p));
 
         // Pavardė
         p = q;
         while (*p == ' ') ++p;
         q = p;
         while (*q && *q != ' ') ++q;
-        st.pav.assign(p, q - p);
+        st.setPav(string(p, q - p));
 
         // Pažymiai
         p = q;
@@ -140,12 +153,12 @@ void ivesti_is_failo(vector<Studentas>& Grupe, const string& failo_vardas) {
 
         if (paz.empty()) continue;
 
-        st.egzas = paz.back();
+        st.setEgzas(paz.back());
         paz.pop_back();
-        st.paz = std::move(paz);
-
-        st.rez_vid = 0.0f;
-        st.rez_med = 0.0f;
+        
+        for (int p : paz) {
+            st.addPazymys(p);
+        }
 
         Grupe.push_back(std::move(st));
         ++kiek_stud;

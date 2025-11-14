@@ -1,12 +1,20 @@
 #pragma once
 #include <vector>
-#include "studentas.h"  // Studentų duomenų struktūrai
+#include <list>
+#include "studentas.h"
 #include <string>
 #include <limits>
 #include <iostream>
 
 Studentas ivesk();
 
+template <typename Container>
+void ivesti_rankiniu_budu(Container& Grupe);
+
+void ivesti_is_failo(std::vector<Studentas>& Grupe, const std::string& failo_vardas);
+int pasirinkti_konteinerio_tipa();
+
+// Template implementacija
 template <typename Container>
 void ivesti_rankiniu_budu(Container& Grupe) {
     int kiek;
@@ -28,6 +36,3 @@ void ivesti_rankiniu_budu(Container& Grupe) {
         Grupe.push_back(st);
     }
 }
-
-void ivesti_is_failo(std::vector<Studentas>& Grupe, const std::string& failo_vardas);
-int pasirinkti_konteinerio_tipa();

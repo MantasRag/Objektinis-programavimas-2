@@ -19,9 +19,9 @@ void spausdinti_rezultatus(const vector<Studentas>& Grupe, int skaiciavimo_metod
         cout << string(50, '-') << endl;
 
         for (auto &st : temp)
-            cout << left << setw(15) << st.vard
-                 << "| " << setw(15) << st.pav
-                 << "| " << right << setw(15) << fixed << setprecision(2) << st.rez_vid
+            cout << left << setw(15) << st.vard()
+                 << "| " << setw(15) << st.pav()
+                 << "| " << right << setw(15) << fixed << setprecision(2) << st.rez_vid()
                  << endl;
     }
     else if (skaiciavimo_metodas == 2) {
@@ -32,9 +32,9 @@ void spausdinti_rezultatus(const vector<Studentas>& Grupe, int skaiciavimo_metod
         cout << string(50, '-') << endl;
 
         for (auto &st : temp)
-            cout << left << setw(15) << st.vard
-                 << "| " << setw(15) << st.pav
-                 << "| " << right << setw(15) << fixed << setprecision(2) << st.rez_med
+            cout << left << setw(15) << st.vard()
+                 << "| " << setw(15) << st.pav()
+                 << "| " << right << setw(15) << fixed << setprecision(2) << st.rez_med()
                  << endl;
     }
     else if (skaiciavimo_metodas == 3) {
@@ -46,10 +46,10 @@ void spausdinti_rezultatus(const vector<Studentas>& Grupe, int skaiciavimo_metod
         cout << string(70, '-') << endl;
 
         for (auto &st : temp)
-            cout << left << setw(15) << st.vard
-                 << "| " << setw(15) << st.pav
-                 << "| " << right << setw(15) << fixed << setprecision(2) << st.rez_vid
-                 << "  | " << setw(15) << fixed << setprecision(2) << st.rez_med
+            cout << left << setw(15) << st.vard()
+                 << "| " << setw(15) << st.pav()
+                 << "| " << right << setw(15) << fixed << setprecision(2) << st.rez_vid()
+                 << "  | " << setw(15) << fixed << setprecision(2) << st.rez_med()
                  << endl;
     }
 }

@@ -28,9 +28,9 @@ void issaugoti_i_txt(const Container& Grupe, const std::string& txt_pavadinimas,
              << std::setw(20) << "Galutinis (vid.)" << "\n";
 
         for (const auto& st : Grupe) {
-            fout << std::left << std::setw(15) << st.vard
-                 << std::setw(15) << st.pav
-                 << std::setw(20) << std::fixed << std::setprecision(2) << st.rez_vid << "\n";
+            fout << std::left << std::setw(15) << st.vard()
+                 << std::setw(15) << st.pav()
+                 << std::setw(20) << std::fixed << std::setprecision(2) << st.rez_vid() << "\n";
         }
     } else if (skaiciavimo_metodas==2) {
         fout << std::left << std::setw(15) << "Vardas" 
@@ -38,9 +38,9 @@ void issaugoti_i_txt(const Container& Grupe, const std::string& txt_pavadinimas,
              << std::setw(20) << "Galutinis (med.)" << "\n";
 
         for (const auto& st : Grupe) {
-            fout << std::left << std::setw(15) << st.vard
-                 << std::setw(15) << st.pav
-                 << std::setw(20) << std::fixed << std::setprecision(2) << st.rez_med << "\n";
+            fout << std::left << std::setw(15) << st.vard()
+                 << std::setw(15) << st.pav()
+                 << std::setw(20) << std::fixed << std::setprecision(2) << st.rez_med() << "\n";
         }
     } else if (skaiciavimo_metodas==3) {
         fout << std::left << std::setw(15) << "Vardas" 
@@ -49,10 +49,10 @@ void issaugoti_i_txt(const Container& Grupe, const std::string& txt_pavadinimas,
              << std::setw(20) << "Galutinis (med.)" << "\n";
 
         for (const auto& st : Grupe) {
-            fout << std::left << std::setw(15) << st.vard
-                 << std::setw(15) << st.pav
-                 << std::setw(20) << std::fixed << std::setprecision(2) << st.rez_vid
-                 << std::setw(20) << std::fixed << std::setprecision(2) << st.rez_med << "\n";
+            fout << std::left << std::setw(15) << st.vard()
+                 << std::setw(15) << st.pav()
+                 << std::setw(20) << std::fixed << std::setprecision(2) << st.rez_vid()
+                 << std::setw(20) << std::fixed << std::setprecision(2) << st.rez_med() << "\n";
         }
     }
 

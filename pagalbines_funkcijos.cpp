@@ -2,7 +2,6 @@
 #include <iostream>
 #include <algorithm>
 #include <limits>
-#include <vector>
 
 using namespace std;
 
@@ -53,8 +52,8 @@ int pasirinkti_skaiciavimo_metoda() {
             return metodas;
         } else {
             cout << "Klaida: pasirinkite skaiciu nuo 1 iki 3\n";
-            cin.clear();                                                    // Nuima failbit
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Išvalo blogą įvestį
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "studentas.h"  // Studentų duomenų struktūrai
+#include "studentas.h"
 
 int kiek_generuoti();
 void generuoti_atsitiktinius(std::vector<Studentas>& Grupe);

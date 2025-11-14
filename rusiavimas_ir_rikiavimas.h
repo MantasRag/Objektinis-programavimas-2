@@ -9,9 +9,24 @@ using namespace std;
 
 void rikiavimo_budas(int &tipas, int &tvarka);
 int dalijimo_budas();
-int pasirinkti_strategija(); // Funkcija strategijos pasirinkimui
+int pasirinkti_strategija();
 
-//  Template funkcijos rikiavimui
+template <typename Container>
+void rusiuoti_studentus(Container& Grupe, int skaiciavimo_metodas, int tipas, int tvarka);
+
+template <typename Container>
+void padalinti_i_grupes_strategija1(const Container& Grupe, int tipas,
+                                    Container& maziau5, Container& daugiaulygu5);
+
+template <typename Container>
+void padalinti_i_grupes_strategija2(Container& Grupe, int tipas,
+                                    Container& maziau5, Container& daugiaulygu5);
+
+template <typename Container>
+void padalinti_i_grupes_strategija3(Container& Grupe, int tipas,
+                                    Container& maziau5, Container& daugiaulygu5);
+
+// Template implementacijos
 template <typename Container>
 void rusiuoti_studentus(Container& Grupe, int skaiciavimo_metodas, int tipas, int tvarka) {
     if (Grupe.empty()) {
@@ -20,14 +35,14 @@ void rusiuoti_studentus(Container& Grupe, int skaiciavimo_metodas, int tipas, in
     }
     if (skaiciavimo_metodas == 1 || (skaiciavimo_metodas == 3 && tipas == 1)) {
         if (tvarka == 1)
-            Grupe.sort([](const Studentas& a, const Studentas& b) { return a.rez_vid < b.rez_vid; });
+            Grupe.sort([](const Studentas& a, const Studentas& b) { return a.rez_vid() < b.rez_vid(); });
         else
-            Grupe.sort([](const Studentas& a, const Studentas& b) { return a.rez_vid > b.rez_vid; });
+            Grupe.sort([](const Studentas& a, const Studentas& b) { return a.rez_vid() > b.rez_vid(); });
     } else {
         if (tvarka == 1)
-            Grupe.sort([](const Studentas& a, const Studentas& b) { return a.rez_med < b.rez_med; });
+            Grupe.sort([](const Studentas& a, const Studentas& b) { return a.rez_med() < b.rez_med(); });
         else
-            Grupe.sort([](const Studentas& a, const Studentas& b) { return a.rez_med > b.rez_med; });
+            Grupe.sort([](const Studentas& a, const Studentas& b) { return a.rez_med() > b.rez_med(); });
     }
 }
 
@@ -42,21 +57,21 @@ inline void rusiuoti_studentus<vector<Studentas>>(vector<Studentas>& Grupe,
     if (skaiciavimo_metodas == 1 || (skaiciavimo_metodas == 3 && tipas == 1)) {
         if (tvarka == 1)
             sort(Grupe.begin(), Grupe.end(),
-                 [](const Studentas& a, const Studentas& b) { return a.rez_vid < b.rez_vid; });
+                 [](const Studentas& a, const Studentas& b) { return a.rez_vid() < b.rez_vid(); });
         else
             sort(Grupe.begin(), Grupe.end(),
-                 [](const Studentas& a, const Studentas& b) { return a.rez_vid > b.rez_vid; });
+                 [](const Studentas& a, const Studentas& b) { return a.rez_vid() > b.rez_vid(); });
     } else {
         if (tvarka == 1)
             sort(Grupe.begin(), Grupe.end(),
-                 [](const Studentas& a, const Studentas& b) { return a.rez_med < b.rez_med; });
+                 [](const Studentas& a, const Studentas& b) { return a.rez_med() < b.rez_med(); });
         else
             sort(Grupe.begin(), Grupe.end(),
-                 [](const Studentas& a, const Studentas& b) { return a.rez_med > b.rez_med; });
+                 [](const Studentas& a, const Studentas& b) { return a.rez_med() > b.rez_med(); });
     }
 }
 
-// 1 STRATEGIJA - COPY+PASTE į du skirtingus failus
+// STRATEGIJA 1
 template <typename Container>
 void padalinti_i_grupes_strategija1(const Container& Grupe, int tipas,
                                     Container& maziau5, Container& daugiaulygu5) {
@@ -69,7 +84,7 @@ void padalinti_i_grupes_strategija1(const Container& Grupe, int tipas,
     daugiaulygu5.clear();
 
     for (const auto& st : Grupe) {
-        float rezultatas = (tipas == 1 ? st.rez_vid : st.rez_med);
+        float rezultatas = (tipas == 1 ? st.rez_vid() : st.rez_med());
         if (rezultatas < 5.0f)
             maziau5.push_back(st);
         else
@@ -82,12 +97,7 @@ void padalinti_i_grupes_strategija1(const Container& Grupe, int tipas,
     cout << "Studentu su >= 5: " << daugiaulygu5.size() << endl;
 }
 
-// 2 STRATEGIJA - Studentai iškerpami iš pradinio konteinerio ir perkeliami į naują
-template <typename Container>
-void padalinti_i_grupes_strategija2(Container& Grupe, int tipas,
-                                    Container& maziau5, Container& daugiaulygu5);
-
-// Vektoriams
+// STRATEGIJA 2 - Vektoriams
 template <>
 inline void padalinti_i_grupes_strategija2<vector<Studentas>>(
     vector<Studentas>& Grupe,
@@ -104,7 +114,7 @@ inline void padalinti_i_grupes_strategija2<vector<Studentas>>(
     daugiaulygu5.clear();
 
     for (auto it = Grupe.begin(); it != Grupe.end(); ) {
-        float rezultatas = (tipas == 1 ? it->rez_vid : it->rez_med);
+        float rezultatas = (tipas == 1 ? it->rez_vid() : it->rez_med());
         
         if (rezultatas < 5.0f) {
             maziau5.push_back(*it);
@@ -122,7 +132,7 @@ inline void padalinti_i_grupes_strategija2<vector<Studentas>>(
     cout << "Studentu su >= 5: " << daugiaulygu5.size() << endl;
 }
 
-// List'ams
+// STRATEGIJA 2 - List'ams
 template <>
 inline void padalinti_i_grupes_strategija2<list<Studentas>>(
     list<Studentas>& Grupe,
@@ -139,7 +149,7 @@ inline void padalinti_i_grupes_strategija2<list<Studentas>>(
     daugiaulygu5.clear();
 
     for (auto it = Grupe.begin(); it != Grupe.end(); ) {
-        float rezultatas = (tipas == 1 ? it->rez_vid : it->rez_med);
+        float rezultatas = (tipas == 1 ? it->rez_vid() : it->rez_med());
         
         if (rezultatas < 5.0f) {
             maziau5.push_back(*it);
@@ -157,14 +167,7 @@ inline void padalinti_i_grupes_strategija2<list<Studentas>>(
     cout << "Studentu su >= 5: " << daugiaulygu5.size() << endl;
 }
 
-// 3 STRATEGIJA
-// Vektoriui naudojama patobulinta pirma strategija
-// List'ui naudojama patobulinta antra strategija
-template <typename Container>
-void padalinti_i_grupes_strategija3(Container& Grupe, int tipas,
-                                    Container& maziau5, Container& daugiaulygu5);
-
-// Vektoriams
+// STRATEGIJA 3 - Vektoriams
 template <>
 inline void padalinti_i_grupes_strategija3<vector<Studentas>>(
     vector<Studentas>& Grupe,
@@ -182,7 +185,7 @@ inline void padalinti_i_grupes_strategija3<vector<Studentas>>(
 
     auto riba = stable_partition(Grupe.begin(), Grupe.end(),
         [tipas](const Studentas& st) { 
-            float rezultatas = (tipas == 1 ? st.rez_vid : st.rez_med);
+            float rezultatas = (tipas == 1 ? st.rez_vid() : st.rez_med());
             return rezultatas < 5.0f;
         });
     
@@ -195,7 +198,7 @@ inline void padalinti_i_grupes_strategija3<vector<Studentas>>(
     cout << "Studentu su >= 5: " << daugiaulygu5.size() << endl;
 }
 
-// List'ams su std:list::splice
+// STRATEGIJA 3 - List'ams
 template <>
 inline void padalinti_i_grupes_strategija3<list<Studentas>>(
     list<Studentas>& Grupe,
@@ -213,7 +216,7 @@ inline void padalinti_i_grupes_strategija3<list<Studentas>>(
 
     auto it = Grupe.begin();
     while (it != Grupe.end()) {
-        float rezultatas = (tipas == 1 ? it->rez_vid : it->rez_med);
+        float rezultatas = (tipas == 1 ? it->rez_vid() : it->rez_med());
         
         if (rezultatas < 5.0f) {
             auto current = it++;

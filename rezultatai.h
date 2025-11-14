@@ -4,38 +4,34 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
-#include "studentas.h"              // Studentų duomenų struktūrai
-#include "pagalbines_funkcijos.h"   // Pagalbinėms funkcijoms
+#include "studentas.h"
+#include "pagalbines_funkcijos.h"
 
 using std::vector;
 
 template <typename Container>
-void skaiciuoti_rezultatus(Container& Grupe, int skaiciavimo_metodas) {
-    if (skaiciavimo_metodas == 1 || skaiciavimo_metodas == 3) {
-        // Vidurkis
-        for (auto &st : Grupe) {
-            if (!st.paz.empty()) {
-                int sum = 0;
-                for (int nd : st.paz) sum += nd;
-                st.rez_vid = st.egzas * 0.6f + (float(sum) / st.paz.size()) * 0.4f;
-            }
-        }
-    }
+void skaiciuoti_rezultatus(Container& Grupe, int skaiciavimo_metodas);
 
-    if (skaiciavimo_metodas == 2 || skaiciavimo_metodas == 3) {
-        // Mediana
-        for (auto &st : Grupe) {
-            if (!st.paz.empty()) {
-                float mediana = sk_mediana(st.paz);
-                st.rez_med = st.egzas * 0.6f + mediana * 0.4f;
-            }
+void spausdinti_rezultatus(const std::vector<Studentas>& Grupe, int skaiciavimo_metodas);
+
+template <typename Container>
+void spausdinti_rezultatus1(const Container& Grupe, int skaiciavimo_metodas);
+
+// Template implementacijos
+template <typename Container>
+void skaiciuoti_rezultatus(Container& Grupe, int skaiciavimo_metodas) {
+    for (auto &st : Grupe) {
+        if (!st.paz().empty()) {
+            std::vector<int> paz_copy = st.paz();
+            float mediana = sk_mediana(paz_copy);
+            
+            // Sukuriame nekonstantinę kopiją, kad galėtume modifikuoti
+            Studentas& st_modifiable = const_cast<Studentas&>(st);
+            st_modifiable.skaiciuotiRezultatus(skaiciavimo_metodas, mediana);
         }
     }
 }
 
-void spausdinti_rezultatus(const std::vector<Studentas>& Grupe, int skaiciavimo_metodas);
-
-// Nauja funkcija rankinio įvedimo rezultatams su atminties adresais
 template <typename Container>
 void spausdinti_rezultatus1(const Container& Grupe, int skaiciavimo_metodas) {
     using namespace std;
@@ -51,9 +47,9 @@ void spausdinti_rezultatus1(const Container& Grupe, int skaiciavimo_metodas) {
         cout << string(85, '-') << endl;
 
         for (const auto &st : Grupe) {
-            cout << left << setw(15) << st.vard
-                 << "| " << setw(15) << st.pav
-                 << "| " << right << setw(18) << fixed << setprecision(2) << st.rez_vid
+            cout << left << setw(15) << st.vard()
+                 << "| " << setw(15) << st.pav()
+                 << "| " << right << setw(18) << fixed << setprecision(2) << st.rez_vid()
                  << " | " << left << &st
                  << endl;
         }
@@ -67,9 +63,9 @@ void spausdinti_rezultatus1(const Container& Grupe, int skaiciavimo_metodas) {
         cout << string(85, '-') << endl;
 
         for (const auto &st : Grupe) {
-            cout << left << setw(15) << st.vard
-                 << "| " << setw(15) << st.pav
-                 << "| " << right << setw(18) << fixed << setprecision(2) << st.rez_med
+            cout << left << setw(15) << st.vard()
+                 << "| " << setw(15) << st.pav()
+                 << "| " << right << setw(18) << fixed << setprecision(2) << st.rez_med()
                  << " | " << left << &st
                  << endl;
         }
@@ -84,10 +80,10 @@ void spausdinti_rezultatus1(const Container& Grupe, int skaiciavimo_metodas) {
         cout << string(105, '-') << endl;
 
         for (const auto &st : Grupe) {
-            cout << left << setw(15) << st.vard
-                 << "| " << setw(15) << st.pav
-                 << "| " << right << setw(18) << fixed << setprecision(2) << st.rez_vid
-                 << "  | " << setw(18) << fixed << setprecision(2) << st.rez_med
+            cout << left << setw(15) << st.vard()
+                 << "| " << setw(15) << st.pav()
+                 << "| " << right << setw(18) << fixed << setprecision(2) << st.rez_vid()
+                 << "  | " << setw(18) << fixed << setprecision(2) << st.rez_med()
                  << " | " << left << &st
                  << endl;
         }
