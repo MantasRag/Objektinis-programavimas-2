@@ -1,11 +1,18 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <iostream>
 
-struct Studentas {
-    std::string vard;
-    std::string pav;
-    std::vector<int> paz;
-    int egzas;
-    float rez_vid, rez_med;
-};
+class Studentas {
+private:
+    std::string vard_;
+    std::string pav_;
+    std::vector<int> paz_;
+    int egzas_;
+    float rez_vid_;
+    float rez_med_;
+
+public:
+    Studentas();
+    Studentas(const std::string& vardas, const std::string& pavarde);
+}
