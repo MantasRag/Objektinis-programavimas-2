@@ -76,3 +76,84 @@
 * Bendras laikas v1.1 buvo apie 14.9% ilgesnis nei v1.0.
 
 ## 2. Programos eksperimentinė analizė naudojant skirtingus kompiliatoriaus optimizavimo lygius.
+* Programa v1.1 bus tikrinama O1, O2 ir O3 kompiliavimo flag'ais. Bs leidžiama programa su "stud100000.txt" (100 000 įrašų), "stud1000000.txt" (1 000 000 įrašų), naudojama 3 strategija list konteineriui.
+
+### 2.1. Bandymai su 100 000 įrašų.
+#### 2.1.1. O1 duomenys.
+
+|   | Nuskaitymas | Skaičiavimas | Rikiavimas | Padalinimas | Išvedimas (<5) | Išvedimas (>=5) | Bendras laikas |
+| - | ----------- | ------------ | ---------- | ----------- | -------------- | --------------- | -------------- |
+| 1 | 0.123       | 0.027        | 0.028      | 0.008       | 0.084          | 0.101           | 0.371          |
+| 2 | 0.119       | 0.027        | 0.024      | 0.008       | 0.077          | 0.119           | 0.374          |
+| 3 | 0.122       | 0.026        | 0.027      | 0.009       | 0.082          | 0.103           | 0.369          |
+
+#### 2.1.2. O2 duomenys.
+
+|   | Nuskaitymas | Skaičiavimas | Rikiavimas | Padalinimas | Išvedimas (<5) | Išvedimas (>=5) | Bendras laikas |
+| - | ----------- | ------------ | ---------- | ----------- | -------------- | --------------- | -------------- |
+| 1 | 0.117       | 0.027        | 0.028      | 0.009       | 0.081          | 0.103           | 0.365          |
+| 2 | 0.115       | 0.026        | 0.028      | 0.008       | 0.092          | 0.110           | 0.379          |
+| 3 | 0.116       | 0.027        | 0.027      | 0.009       | 0.079          | 0.103           | 0.361          |
+
+#### 2.1.3. O3 duomenys.
+
+|   | Nuskaitymas | Skaičiavimas | Rikiavimas | Padalinimas | Išvedimas (<5) | Išvedimas (>=5) | Bendras laikas |
+| - | ----------- | ------------ | ---------- | ----------- | -------------- | --------------- | -------------- |
+| 1 | 0.120       | 0.025        | 0.029      | 0.008       | 0.078          | 0.117           | 0.377          |
+| 2 | 0.129       | 0.029        | 0.029      | 0.007       | 0.071          | 0.114           | 0.379          |
+| 3 | 0.114       | 0.027        | 0.024      | 0.008       | 0.081          | 0.102           | 0.356          |
+
+#### 2.1.4. Palyginimas.
+
+| Stulpelis       | O1     | O2     | O3     | Greitesnė versija |
+| --------------- | ------ | ------ | ------ | ----------------- |
+| Nuskaitymas     | 0.1213 | 0.1160 | 0.1210 | **O2**            |
+| Skaičiavimas    | 0.0267 | 0.0267 | 0.0270 | **O1 / O2**       |
+| Rikiavimas      | 0.0263 | 0.0277 | 0.0273 | **O1**            |
+| Padalinimas     | 0.0083 | 0.0087 | 0.0077 | **O3**            |
+| Išvedimas (<5)  | 0.0810 | 0.0840 | 0.0767 | **O3**            |
+| Išvedimas (>=5) | 0.1077 | 0.1053 | 0.1110 | **O2**            |
+| Bendras laikas  | 0.3713 | 0.3683 | 0.3707 | **O2**            |
+
+* Greičiausia vidutinė programa pagal bendrą laiką yra O2 (0.368 s), nors skirtumas su O1 ir O3 nėra didelis (~0.003–0.004 s).
+* Skirtumas tarp O1, O2 ir O3 yra nedidelis – tik ~0.8 % greičiau O2 ir ~0.16 % greičiau O3 lyginant su O1.
+
+### 2.2. Bandymai su 1 000 000 įrašų.
+#### 2.2.1. O1 duomenys.
+
+|   | Nuskaitymas | Skaičiavimas | Rikiavimas | Padalinimas | Išvedimas (<5) | Išvedimas (>=5) | Bendras laikas |
+| - | ----------- | ------------ | ---------- | ----------- | -------------- | --------------- | -------------- |
+| 1 | 1.119       | 0.263        | 0.569      | 0.094       | 0.706          | 1.002           | 3.753          |
+| 2 | 1.079       | 0.254        | 0.578      | 0.103       | 0.667          | 0.926           | 3.607          |
+| 3 | 1.112       | 0.254        | 0.662      | 0.129       | 0.643          | 1.072           | 3.872          |
+
+#### 2.2.2. O2 duomenys.
+
+|   | Nuskaitymas | Skaičiavimas | Rikiavimas | Padalinimas | Išvedimas (<5) | Išvedimas (>=5) | Bendras laikas |
+| - | ----------- | ------------ | ---------- | ----------- | -------------- | --------------- | -------------- |
+| 1 | 1.054       | 0.271        | 0.588      | 0.109       | 0.681          | 0.941           | 3.644          |
+| 2 | 1.069       | 0.268        | 0.580      | 0.099       | 0.680          | 1.009           | 3.705          |
+| 3 | 1.060       | 0.259        | 0.585      | 0.106       | 0.692          | 0.942           | 3.644          |
+
+#### 2.2.3. O3 duomenys.
+
+|   | Nuskaitymas | Skaičiavimas | Rikiavimas | Padalinimas | Išvedimas (<5) | Išvedimas (>=5) | Bendras laikas |
+| - | ----------- | ------------ | ---------- | ----------- | -------------- | --------------- | -------------- |
+| 1 | 1.062       | 0.283        | 0.604      | 0.102       | 0.803          | 0.910           | 3.764          |
+| 2 | 1.101       | 0.262        | 0.562      | 0.107       | 0.684          | 1.125           | 3.841          |
+| 3 | 1.041       | 0.259        | 0.567      | 0.102       | 0.665          | 0.917           | 3.551          |
+
+#### 2.2.4. Palyginimas.
+
+| Stulpelis       | O1     | O2     | O3     | Greitesnė versija |
+| --------------- | ------ | ------ | ------ | ----------------- |
+| Nuskaitymas     | 1.1033 | 1.0610 | 1.0683 | **O2**            |
+| Skaičiavimas    | 0.2573 | 0.2660 | 0.2680 | **O1**            |
+| Rikiavimas      | 0.6030 | 0.5847 | 0.5777 | **O3**            |
+| Padalinimas     | 0.1087 | 0.1047 | 0.1037 | **O3**            |
+| Išvedimas (<5)  | 0.6720 | 0.6843 | 0.7173 | **O1**            |
+| Išvedimas (>=5) | 1.0000 | 0.9833 | 0.9840 | **O2**            |
+| Bendras laikas  | 3.744  | 3.664  | 3.719  | **O2**            |
+
+* Eksperimentas parodė, kad kompiliatoriaus optimizacijos flag’ai O1, O2 ir O3 turi nedidelį, bet matomą poveikį programos našumui. Bendras vidutinis laikas buvo mažiausias naudojant O2 flag’ą (3.664 s), kuris buvo apie 2,1 % greitesnis nei O1 ir šiek tiek pranašesnis už O3. Skirtumai tarp optimizacijos lygių yra gana nedideli, todėl programos našumas iš esmės stabilus visais flag’ais, o O2 suteikia lengvą pranašumą bendroje spartoje.
+
