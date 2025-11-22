@@ -15,7 +15,12 @@ private:
 public:
     Studentas();
     Studentas(const std::string& vardas, const std::string& pavarde);
-    
+
+    // Rule of three
+    Studentas(const Studentas& other);            // copy constructor
+    Studentas& operator=(const Studentas& other); // copy assignment
+    ~Studentas();                                 // Destruktorius
+
     // Get'eriai - gražina klasės narių reikšmes
     inline std::string vard() const { return vard_; }
     inline std::string pav() const { return pav_; }
@@ -23,7 +28,7 @@ public:
     inline int egzas() const { return egzas_; }
     inline float rez_vid() const { return rez_vid_; }
     inline float rez_med() const { return rez_med_; }
-    
+
     // Set'eriai - nustato klasės narių reikšmes
     void setVard(const std::string& vardas);
     void setPav(const std::string& pavarde);
@@ -32,12 +37,13 @@ public:
     void setRezVid(float vid);
     void setRezMed(float med);
     void clearPaz();
-    
+
     // Member funkcija rezultatų skaičiavimui
     void skaiciuotiRezultatus(int metodas, float mediana);
 
-    // Destruktorius
-    ~Studentas();
+    // Operatoriai
+    friend std::ostream& operator<<(std::ostream& os, const Studentas& s);
+    friend std::istream& operator>>(std::istream& is, Studentas& s);
 };
 
 bool lygintiVid(const Studentas& a, const Studentas& b);
