@@ -9,6 +9,19 @@ Studentas::Studentas(const Studentas& other)
     : vard_(other.vard_), pav_(other.pav_), paz_(other.paz_),
       egzas_(other.egzas_), rez_vid_(other.rez_vid_), rez_med_(other.rez_med_) {}
 
+// Kopijavimo priskyrimo operatorius
+Studentas& Studentas::operator=(const Studentas& other) {
+    if (this != &other) {
+        vard_ = other.vard_;
+        pav_ = other.pav_;
+        paz_ = other.paz_;
+        egzas_ = other.egzas_;
+        rez_vid_ = other.rez_vid_;
+        rez_med_ = other.rez_med_;
+    }
+    return *this;
+}
+
 // Set'eriai
 void Studentas::setVard(const std::string& vardas) { vard_ = vardas; }
 void Studentas::setPav(const std::string& pavarde) { pav_ = pavarde; }
