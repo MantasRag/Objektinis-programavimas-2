@@ -1,5 +1,7 @@
 #include "studentas.h"
 #include <iomanip>
+#include <sstream>
+#include <limits>
 
 Studentas::Studentas() : egzas_(0), rez_vid_(0.0f), rez_med_(0.0f) {}
 Studentas::Studentas(const std::string& vardas, const std::string& pavarde)
@@ -23,6 +25,16 @@ Studentas& Studentas::operator=(const Studentas& other) {
     return *this;
 }
 
+// Destruktorius
+Studentas::~Studentas() {
+    vard_.clear();
+    pav_.clear();
+    paz_.clear();
+    egzas_ = 0;
+    rez_vid_ = 0.0f;
+    rez_med_ = 0.0f;
+}
+
 // Set'eriai
 void Studentas::setVard(const std::string& vardas) { vard_ = vardas; }
 void Studentas::setPav(const std::string& pavarde) { pav_ = pavarde; }
@@ -44,59 +56,90 @@ void Studentas::skaiciuotiRezultatus(int metodas, float mediana) {
     }
 }
 
-// Destruktorius
-Studentas::~Studentas() {
-    vard_.clear();
-    pav_.clear();
-    paz_.clear();
-    egzas_ = 0;
-    rez_vid_ = 0.0f;
-    rez_med_ = 0.0f;
-}
-
-
 bool lygintiVid(const Studentas& a, const Studentas& b) {
     return a.rez_vid() < b.rez_vid();
 }
-
 bool lygintiMed(const Studentas& a, const Studentas& b) {
     return a.rez_med() < b.rez_med();
 }
 
-// Išvedimo operatorius
+// Išvedimo operatorius (išvedimui į ekraną)
 std::ostream& operator<<(std::ostream& os, const Studentas& s) {
-    os << "Vardas: " << s.vard_ << "\n";
-    os << "Pavardė: " << s.pav_ << "\n";
-    os << "Pažymiai: ";
-    for (int p : s.paz_) {
-        os << p << " ";
+    os << std::left << std::setw(15) << s.vard_
+       << "| " << std::setw(15) << s.pav_
+       << "| ";
+    
+    if (s.rez_vid_ > 0.0f && s.rez_med_ > 0.0f) { // Vidurkis ir mediana
+        os << std::right << std::setw(18) << std::fixed << std::setprecision(2) << s.rez_vid_
+           << "  | " << std::setw(18) << std::fixed << std::setprecision(2) << s.rez_med_;
+    } else if (s.rez_vid_ > 0.0f) { // Tik vidurkis
+        os << std::right << std::setw(18) << std::fixed << std::setprecision(2) << s.rez_vid_;
+    } else if (s.rez_med_ > 0.0f) { // Tik mediana
+        os << std::right << std::setw(18) << std::fixed << std::setprecision(2) << s.rez_med_;
     }
-    os << "\nEgzaminas: " << s.egzas_ << "\n";
-    os << "Galutinis vidurkis: " << s.rez_vid_ << "\n";
-    os << "Galutinė mediana: " << s.rez_med_ << "\n";
+    
     return os;
 }
 
-// Įvedimo operatorius
+// Įvedimo operatorius (įvedimui su nežinomu pažymių kiekiu)
 std::istream& operator>>(std::istream& is, Studentas& s) {
     s.paz_.clear();
-    int kiekNd, paz;
-
-    std::cout << "Įveskite vardą: ";
-    is >> s.vard_;
-    std::cout << "Įveskite pavardę: ";
-    is >> s.pav_;
-    std::cout << "Kiek pažymių įvesite? ";
-    is >> kiekNd;
-
-    std::cout << "Įveskite pažymius: ";
-    for (int i = 0; i < kiekNd; i++) {
-        is >> paz;
-        s.paz_.push_back(paz);
+    
+    std::string vardas;
+    std::cout << "Iveskite studento varda: ";
+    is >> vardas;
+    s.setVard(vardas);
+    
+    std::string pavarde;
+    std::cout << "Iveskite studento pavarde: ";
+    is >> pavarde;
+    s.setPav(pavarde);
+    
+    is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    
+    std::cout << "Iveskite namu darbu pazymius (1-10). Noredami baigti, spauskite ENTER tusciai eilutei:\n";
+    std::string line;
+    int pazymys_num = 1;
+    
+    while (true) {
+        std::cout << "Iveskite " << pazymys_num << " pazymi (arba ENTER jei baigete): ";
+        std::getline(is, line);
+        
+        if (line.empty()) {
+            if (s.paz_.empty()) {
+                std::cout << "Klaida: reikia ivesti bent viena pazymi!\n";
+                continue;
+            }
+            break;
+        }
+        
+        std::istringstream iss(line);
+        int pazymys;
+        
+        if (iss >> pazymys && iss.eof()) {
+            if (pazymys >= 1 && pazymys <= 10) {
+                s.addPazymys(pazymys);
+                pazymys_num++;
+            } else {
+                std::cout << "Klaida: pazymys turi buti nuo 1 iki 10. Iveskite dar karta.\n";
+            }
+        } else {
+            std::cout << "Klaida: iveskite teisinga skaiciu (1-10) arba ENTER jei baigete.\n";
+        }
     }
-
-    std::cout << "Įveskite egzamino pažymį: ";
-    is >> s.egzas_;
-
+    
+    int egzaminas;
+    do {
+        std::cout << "Iveskite egzamino rezultata (1-10): ";
+        is >> egzaminas;
+        if (egzaminas < 1 || egzaminas > 10) {
+            std::cout << "Klaida: egzamino ivertinimas turi buti nuo 1 iki 10. Ivertinima ivesti dar karta.\n";
+            is.clear();
+            is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    } while (egzaminas < 1 || egzaminas > 10);
+    
+    s.setEgzas(egzaminas);
+    
     return is;
 }

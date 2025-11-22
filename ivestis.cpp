@@ -7,79 +7,13 @@
 #include <string>
 #include <limits>
 
-
 using namespace std;
 
 Studentas ivesk() {
     Studentas Laik;
     
-    string vardas, pavarde;
-    cout << "Įveskite studento vardą: "; 
-    cin >> vardas;
-    Laik.setVard(vardas);
-    
-    cout << "Įveskite studento pavardę: "; 
-    cin >> pavarde;
-    Laik.setPav(pavarde);
-    
-    cin.ignore();
-    
-    cout << "Įveskite namų darbų pažymius (1-10). Norėdami baigti, spauskite ENTER tuščiai eilutei:\n";
-    string line;
-    int pazymys_num = 1;
-    
-    while (true) {
-        cout << "Įveskite " << pazymys_num << " pažymį (arba ENTER jei baigėte): ";
-        getline(cin, line);
-        
-        if (line.empty()) {
-            if (Laik.paz().empty()) {
-                cout << "Klaida: reikia įvesti bent vieną pažymį!\n";
-                continue;
-            }
-            break;
-        }
-        
-        istringstream iss(line);
-        int pazymys;
-        
-        if (iss >> pazymys && iss.eof()) {
-            if (pazymys >= 1 && pazymys <= 10) {
-                Laik.addPazymys(pazymys);
-                pazymys_num++;
-            } else {
-                cout << "Klaida: pažymys turi būti nuo 1 iki 10. Įveskite dar kartą.\n";
-            }
-        } else {
-            cout << "Klaida: įveskite teisingą skaičių (1-10) arba ENTER jei baigėte.\n";
-        }
-    }
-    
-    int egzaminas;
-    do {
-        cout << "Iveskite egzamino rezultata (1-10): ";
-        cin >> egzaminas;
-        if (egzaminas < 1 || egzaminas > 10) {
-            cout << "Klaida: egzamino ivertinimas turi būti nuo 1 iki 10. Ivertinima ivesti dar karta.\n";
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
-    } while (egzaminas < 1 || egzaminas > 10);
-    
-    Laik.setEgzas(egzaminas);
-    
-    // Skaičiuojame rezultatus
-    std::vector<int> paz_copy = Laik.paz();
-    float mediana = sk_mediana(paz_copy);
-    
-    int sum = 0;
-    for (int nd : Laik.paz()) sum += nd;
-    float rez_vid = egzaminas * 0.6f + float(sum) / Laik.paz().size() * 0.4f;
-    float rez_med = egzaminas * 0.6f + mediana * 0.4f;
-    
-    Laik.setRezVid(rez_vid);
-    Laik.setRezMed(rez_med);
-    
+    // Naudojamas įvesties operatorius
+    cin >> Laik; 
     return Laik;
 }
 

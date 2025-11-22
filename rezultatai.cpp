@@ -7,49 +7,45 @@
 
 using namespace std;
 
+// Spausdina rezultatus be atmintės adresų (tik vektoriams)
 void spausdinti_rezultatus(const vector<Studentas>& Grupe, int skaiciavimo_metodas) {
-    const vector<Studentas>& temp = Grupe;
     cout << "           STUDENTU REZULTATAI          \n";
 
     if (skaiciavimo_metodas == 1) {
         cout << left << setw(15) << "Vardas"
              << "| " << setw(15) << "Pavardė"
-             << "| " << right << setw(15) << "Galutinis (vid.)"
+             << "| " << right << setw(18) << "Galutinis (vid.)"
              << endl;
-        cout << string(50, '-') << endl;
+        cout << string(52, '-') << endl;
 
-        for (auto &st : temp)
-            cout << left << setw(15) << st.vard()
-                 << "| " << setw(15) << st.pav()
-                 << "| " << right << setw(15) << fixed << setprecision(2) << st.rez_vid()
-                 << endl;
+        // Naudojame išvesties operatorių
+        for (const auto &st : Grupe) {
+            cout << st << endl;
+        }
     }
     else if (skaiciavimo_metodas == 2) {
         cout << left << setw(15) << "Vardas"
              << "| " << setw(15) << "Pavardė"
-             << "| " << right << setw(15) << "Galutinis (med.)"
+             << "| " << right << setw(18) << "Galutinis (med.)"
              << endl;
-        cout << string(50, '-') << endl;
+        cout << string(52, '-') << endl;
 
-        for (auto &st : temp)
-            cout << left << setw(15) << st.vard()
-                 << "| " << setw(15) << st.pav()
-                 << "| " << right << setw(15) << fixed << setprecision(2) << st.rez_med()
-                 << endl;
+        // Naudojame išvesties operatorių
+        for (const auto &st : Grupe) {
+            cout << st << endl;
+        }
     }
     else if (skaiciavimo_metodas == 3) {
         cout << left << setw(15) << "Vardas"
              << "| " << setw(15) << "Pavardė"
-             << "| " << right << setw(15) << "Galutinis (vid.)"
-             << " | " << setw(15) << "Galutinis (med.)"
+             << "| " << right << setw(18) << "Galutinis (vid.)"
+             << " | " << setw(18) << "Galutinis (med.)"
              << endl;
-        cout << string(70, '-') << endl;
+        cout << string(72, '-') << endl;
 
-        for (auto &st : temp)
-            cout << left << setw(15) << st.vard()
-                 << "| " << setw(15) << st.pav()
-                 << "| " << right << setw(15) << fixed << setprecision(2) << st.rez_vid()
-                 << "  | " << setw(15) << fixed << setprecision(2) << st.rez_med()
-                 << endl;
+        // Naudojame išvesties operatorių
+        for (const auto &st : Grupe) {
+            cout << st << endl;
+        }
     }
 }

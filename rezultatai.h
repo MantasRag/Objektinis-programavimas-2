@@ -17,21 +17,19 @@ void spausdinti_rezultatus(const std::vector<Studentas>& Grupe, int skaiciavimo_
 template <typename Container>
 void spausdinti_rezultatus1(const Container& Grupe, int skaiciavimo_metodas);
 
-// Template implementacijos
+// Skaičiuoja rezultatus visiems studentams konteinyje
 template <typename Container>
 void skaiciuoti_rezultatus(Container& Grupe, int skaiciavimo_metodas) {
     for (auto &st : Grupe) {
         if (!st.paz().empty()) {
             std::vector<int> paz_copy = st.paz();
             float mediana = sk_mediana(paz_copy);
-            
-            // Sukuriame nekonstantinę kopiją, kad galėtume modifikuoti
-            Studentas& st_modifiable = const_cast<Studentas&>(st);
-            st_modifiable.skaiciuotiRezultatus(skaiciavimo_metodas, mediana);
+            st.skaiciuotiRezultatus(skaiciavimo_metodas, mediana);
         }
     }
 }
 
+// Spausdina rezultatus su atmintės adresais (template - veikia su vector ir list)
 template <typename Container>
 void spausdinti_rezultatus1(const Container& Grupe, int skaiciavimo_metodas) {
     using namespace std;
@@ -47,11 +45,7 @@ void spausdinti_rezultatus1(const Container& Grupe, int skaiciavimo_metodas) {
         cout << string(85, '-') << endl;
 
         for (const auto &st : Grupe) {
-            cout << left << setw(15) << st.vard()
-                 << "| " << setw(15) << st.pav()
-                 << "| " << right << setw(18) << fixed << setprecision(2) << st.rez_vid()
-                 << " | " << left << &st
-                 << endl;
+            cout << st << " | " << &st << endl;
         }
     }
     else if (skaiciavimo_metodas == 2) {
@@ -63,11 +57,7 @@ void spausdinti_rezultatus1(const Container& Grupe, int skaiciavimo_metodas) {
         cout << string(85, '-') << endl;
 
         for (const auto &st : Grupe) {
-            cout << left << setw(15) << st.vard()
-                 << "| " << setw(15) << st.pav()
-                 << "| " << right << setw(18) << fixed << setprecision(2) << st.rez_med()
-                 << " | " << left << &st
-                 << endl;
+            cout << st << " | " << &st << endl;
         }
     }
     else if (skaiciavimo_metodas == 3) {
@@ -80,12 +70,7 @@ void spausdinti_rezultatus1(const Container& Grupe, int skaiciavimo_metodas) {
         cout << string(105, '-') << endl;
 
         for (const auto &st : Grupe) {
-            cout << left << setw(15) << st.vard()
-                 << "| " << setw(15) << st.pav()
-                 << "| " << right << setw(18) << fixed << setprecision(2) << st.rez_vid()
-                 << "  | " << setw(18) << fixed << setprecision(2) << st.rez_med()
-                 << " | " << left << &st
-                 << endl;
+            cout << st << " | " << &st << endl;
         }
     }
 }
