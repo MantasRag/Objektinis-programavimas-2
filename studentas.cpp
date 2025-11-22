@@ -4,6 +4,11 @@ Studentas::Studentas() : egzas_(0), rez_vid_(0.0f), rez_med_(0.0f) {}
 Studentas::Studentas(const std::string& vardas, const std::string& pavarde)
     : vard_(vardas), pav_(pavarde), egzas_(0), rez_vid_(0.0f), rez_med_(0.0f) {}
 
+// Kopijavimo konstruktorius
+Studentas::Studentas(const Studentas& other)
+    : vard_(other.vard_), pav_(other.pav_), paz_(other.paz_),
+      egzas_(other.egzas_), rez_vid_(other.rez_vid_), rez_med_(other.rez_med_) {}
+
 // Set'eriai
 void Studentas::setVard(const std::string& vardas) { vard_ = vardas; }
 void Studentas::setPav(const std::string& pavarde) { pav_ = pavarde; }
