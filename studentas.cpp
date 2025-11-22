@@ -1,4 +1,5 @@
 #include "studentas.h"
+#include <iomanip>
 
 Studentas::Studentas() : egzas_(0), rez_vid_(0.0f), rez_med_(0.0f) {}
 Studentas::Studentas(const std::string& vardas, const std::string& pavarde)
@@ -60,4 +61,42 @@ bool lygintiVid(const Studentas& a, const Studentas& b) {
 
 bool lygintiMed(const Studentas& a, const Studentas& b) {
     return a.rez_med() < b.rez_med();
+}
+
+// Išvedimo operatorius
+std::ostream& operator<<(std::ostream& os, const Studentas& s) {
+    os << "Vardas: " << s.vard_ << "\n";
+    os << "Pavardė: " << s.pav_ << "\n";
+    os << "Pažymiai: ";
+    for (int p : s.paz_) {
+        os << p << " ";
+    }
+    os << "\nEgzaminas: " << s.egzas_ << "\n";
+    os << "Galutinis vidurkis: " << s.rez_vid_ << "\n";
+    os << "Galutinė mediana: " << s.rez_med_ << "\n";
+    return os;
+}
+
+// Įvedimo operatorius
+std::istream& operator>>(std::istream& is, Studentas& s) {
+    s.paz_.clear();
+    int kiekNd, paz;
+
+    std::cout << "Įveskite vardą: ";
+    is >> s.vard_;
+    std::cout << "Įveskite pavardę: ";
+    is >> s.pav_;
+    std::cout << "Kiek pažymių įvesite? ";
+    is >> kiekNd;
+
+    std::cout << "Įveskite pažymius: ";
+    for (int i = 0; i < kiekNd; i++) {
+        is >> paz;
+        s.paz_.push_back(paz);
+    }
+
+    std::cout << "Įveskite egzamino pažymį: ";
+    is >> s.egzas_;
+
+    return is;
 }
