@@ -14,11 +14,41 @@
 #include "ivestis.h"
 #include "isvedimas.h"
 #include "studentas.h"
+#include "zmogus.h"
 
 using namespace std;
 using namespace std::chrono;
 
+void demonstruoti_abstrakcia_klase() {
+    cout << "Demonstracija irodanti, kad Zmogus klase yra abstrakti: \n";
+    
+    cout << "1. Bandymas sukurti Zmogus objekta:\n";
+    cout << "Zmogus zmogus1;\n";
+    cout << "Zmogus zmogus2(\"Jonas\", \"Jonaitis\");\n";
+    cout << "Klaidos, nes Zmogus yra abstrakti klase (virtual void spausdinti()) \n";
+    
+    // Zmogus zmogus1;
+    // Zmogus zmogus2("Jonas", "Jonaitis");
+    
+    cout << "2. Irodymas, kad pavyksta sukurti isvestines klases Studentas objektus:\n";
+    Studentas studentas1("Petras", "Petraitis");
+    studentas1.addPazymys(8);
+    studentas1.addPazymys(9);
+    studentas1.setEgzas(10);
+    
+    cout << "Studentas studentas1(\"Petras\", \"Petraitis\");\n";
+    cout << "Vardas: " << studentas1.vard() << " (is Zmogus klases)\n";
+    cout << "Pavarde: " << studentas1.pav() << " (is Zmogus klases)\n";
+    cout << "Pazymiai: ";
+    for (int p : studentas1.paz()) cout << p << " ";
+    cout << "\n";
+    cout << "Egzamino ivertinimas: " << studentas1.egzas() << "\n\n";
+}
+
 int main() {
+    // Demonstruojame abstrakčią klasę
+    demonstruoti_abstrakcia_klase();
+    
     vector<Studentas> Grupe;
     vector<Studentas> maziau5;
     vector<Studentas> daugiaulygu5;
