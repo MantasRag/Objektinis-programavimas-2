@@ -13,7 +13,7 @@ void spausdinti_rezultatus(const vector<Studentas>& Grupe, int skaiciavimo_metod
 
     if (skaiciavimo_metodas == 1) {
         cout << left << setw(15) << "Vardas"
-             << "| " << setw(15) << "Pavardė"
+             << "| " << setw(15) << "Pavarde"
              << "| " << right << setw(18) << "Galutinis (vid.)"
              << endl;
         cout << string(52, '-') << endl;
