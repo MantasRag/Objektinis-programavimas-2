@@ -2,11 +2,11 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "zmogus.h"
 
-class Studentas {
+
+class Studentas : public Zmogus {   // Klasė studentas išvedama iš klasės žmogus
 private:
-    std::string vard_;
-    std::string pav_;
     std::vector<int> paz_;
     int egzas_;
     float rez_vid_;
@@ -21,17 +21,13 @@ public:
     Studentas& operator=(const Studentas& other); // copy assignment
     ~Studentas();                                 // Destruktorius
 
-    // Get'eriai - gražina klasės narių reikšmes
-    inline std::string vard() const { return vard_; }
-    inline std::string pav() const { return pav_; }
+    // Get'eriai - paveldi vard() ir pav() iš Zmogus
     inline const std::vector<int>& paz() const { return paz_; }
     inline int egzas() const { return egzas_; }
     inline float rez_vid() const { return rez_vid_; }
     inline float rez_med() const { return rez_med_; }
 
-    // Set'eriai - nustato klasės narių reikšmes
-    void setVard(const std::string& vardas);
-    void setPav(const std::string& pavarde);
+    // Set'eriai - paveldi setVard() ir setPav() iš Zmogus
     void setEgzas(int egzaminas);
     void addPazymys(int pazymys);
     void setRezVid(float vid);
@@ -40,6 +36,9 @@ public:
 
     // Member funkcija rezultatų skaičiavimui
     void skaiciuotiRezultatus(int metodas, float mediana);
+
+    // Override virtualios funkcijos iš bazinės klasės
+    virtual void spausdinti(std::ostream& os) const override;
 
     // Operatoriai
     friend std::ostream& operator<<(std::ostream& os, const Studentas& s);

@@ -3,20 +3,20 @@
 #include <sstream>
 #include <limits>
 
-Studentas::Studentas() : egzas_(0), rez_vid_(0.0f), rez_med_(0.0f) {}
+Studentas::Studentas() : Zmogus(), egzas_(0), rez_vid_(0.0f), rez_med_(0.0f) {}
+
 Studentas::Studentas(const std::string& vardas, const std::string& pavarde)
-    : vard_(vardas), pav_(pavarde), egzas_(0), rez_vid_(0.0f), rez_med_(0.0f) {}
+    : Zmogus(vardas, pavarde), egzas_(0), rez_vid_(0.0f), rez_med_(0.0f) {}
 
 // Kopijavimo konstruktorius
 Studentas::Studentas(const Studentas& other)
-    : vard_(other.vard_), pav_(other.pav_), paz_(other.paz_),
+    : Zmogus(other), paz_(other.paz_),
       egzas_(other.egzas_), rez_vid_(other.rez_vid_), rez_med_(other.rez_med_) {}
 
-// Kopijavimo priskyrimo operatorius
+// Kopijos priskyrimo konstruktorius
 Studentas& Studentas::operator=(const Studentas& other) {
     if (this != &other) {
-        vard_ = other.vard_;
-        pav_ = other.pav_;
+        Zmogus::operator=(other);
         paz_ = other.paz_;
         egzas_ = other.egzas_;
         rez_vid_ = other.rez_vid_;
@@ -27,8 +27,6 @@ Studentas& Studentas::operator=(const Studentas& other) {
 
 // Destruktorius
 Studentas::~Studentas() {
-    vard_.clear();
-    pav_.clear();
     paz_.clear();
     egzas_ = 0;
     rez_vid_ = 0.0f;
@@ -36,8 +34,6 @@ Studentas::~Studentas() {
 }
 
 // Set'eriai
-void Studentas::setVard(const std::string& vardas) { vard_ = vardas; }
-void Studentas::setPav(const std::string& pavarde) { pav_ = pavarde; }
 void Studentas::setEgzas(int egzaminas) { egzas_ = egzaminas; }
 void Studentas::addPazymys(int pazymys) { paz_.push_back(pazymys); }
 void Studentas::setRezVid(float vid) { rez_vid_ = vid; }
@@ -56,6 +52,22 @@ void Studentas::skaiciuotiRezultatus(int metodas, float mediana) {
     }
 }
 
+// Virtualios funkcijos rezultatų spauzdinimas
+void Studentas::spausdinti(std::ostream& os) const {
+    os << std::left << std::setw(15) << vard_
+       << "| " << std::setw(15) << pav_
+       << "| ";
+    
+    if (rez_vid_ > 0.0f && rez_med_ > 0.0f) {
+        os << std::right << std::setw(18) << std::fixed << std::setprecision(2) << rez_vid_
+           << "  | " << std::setw(18) << std::fixed << std::setprecision(2) << rez_med_;
+    } else if (rez_vid_ > 0.0f) {
+        os << std::right << std::setw(18) << std::fixed << std::setprecision(2) << rez_vid_;
+    } else if (rez_med_ > 0.0f) {
+        os << std::right << std::setw(18) << std::fixed << std::setprecision(2) << rez_med_;
+    }
+}
+
 bool lygintiVid(const Studentas& a, const Studentas& b) {
     return a.rez_vid() < b.rez_vid();
 }
@@ -65,19 +77,7 @@ bool lygintiMed(const Studentas& a, const Studentas& b) {
 
 // Išvedimo operatorius (išvedimui į ekraną)
 std::ostream& operator<<(std::ostream& os, const Studentas& s) {
-    os << std::left << std::setw(15) << s.vard_
-       << "| " << std::setw(15) << s.pav_
-       << "| ";
-    
-    if (s.rez_vid_ > 0.0f && s.rez_med_ > 0.0f) { // Vidurkis ir mediana
-        os << std::right << std::setw(18) << std::fixed << std::setprecision(2) << s.rez_vid_
-           << "  | " << std::setw(18) << std::fixed << std::setprecision(2) << s.rez_med_;
-    } else if (s.rez_vid_ > 0.0f) { // Tik vidurkis
-        os << std::right << std::setw(18) << std::fixed << std::setprecision(2) << s.rez_vid_;
-    } else if (s.rez_med_ > 0.0f) { // Tik mediana
-        os << std::right << std::setw(18) << std::fixed << std::setprecision(2) << s.rez_med_;
-    }
-    
+    s.spausdinti(os);
     return os;
 }
 
