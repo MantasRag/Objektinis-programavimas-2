@@ -1,27 +1,28 @@
 @echo off
+echo      PALEIDZIAMA STUDENTU SISTEMA
+echo.
 
 REM Patikrinti ar build katalogas egzistuoja
 if not exist build (
-    echo [KLAIDA] Build katalogas nerastas!
+    echo [KLAIDA] Build katalogas nerastas
     echo Pirmiausia paleiskite: build.bat
-    echo.
     pause
     exit /b 1
 )
 
 REM Patikrinti ar .exe failas egzistuoja
-if not exist build\Studentai_v1.exe (
-    echo [KLAIDA] Vykdomasis failas nerastas!
+if not exist build\Studentu_Sistema.exe (
+    echo [KLAIDA] Vykdomasis failas nerastas
     echo Pirmiausia paleiskite: build.bat
-    echo.
     pause
     exit /b 1
 )
 
-REM Pereiti į build katalogą ir paleisti
 cd build
+echo Paleidziama programa...
 echo.
-Studentai_v1.exe
 echo.
+
+Studentu_Sistema.exe
 cd ..
 pause
