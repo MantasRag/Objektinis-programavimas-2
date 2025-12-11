@@ -393,16 +393,33 @@ Ekrano kopija (terminalas su išvesta informacija):
 
 ### v2.0
 
-#### v2.0 atnaujinimai:
+**v2.0 atnaujinimai:**
 - Sukurta Doxygen html programos dokumentacija. Plačiai aprašytos Studentas() ir Zmogus() klasės. Dokumentacijoje taip pat galima rasti kitas programos funkcijas (visas, kurios buvo naudotos), lengvai randami jų kodai.
-- Realizuuoti unit testai klasėms Studentas() ir Zmogus() naudojant "Google test". Testų paleidimams sukurti atskiri nuo pagrindinės programos .exe failai (test_studentas.exe, test_zmogus.exe), kurie sukuriami su bendru build.bat failu, o paleidžiami du kartus paspaudus tuos .exe failus arba cmd terminale paleidus run_tests.bat failą.
-Studentas klasės testai (8):
-1. 
-Zmogus klasės testai (4):
+- Realizuuoti unit testai klasėms Studentas() ir Zmogus() naudojant "Google test". Testų paleidimams sukurti atskiri nuo pagrindinės programos .exe failai (test_studentas.exe, test_zmogus.exe), kurie sukuriami su bendru build.bat failu, o paleidžiami du kartus paspaudus tuos .exe failus arba cmd terminale paleidus run_tests.bat failą. Abu test failai yra įkelti tests\ kataloge. Testavimai:
+1. Studentas klasės testai (test_studentas.cpp): šiame faile įgyvendinti 8 Google test framework testai studentas klasei: tikrinami konstruktoriai, pažymių pridėjimas, galutinio balo skaičiavimas (vidurkis ir mediana), testuojama ar kopijavimo operatorius veikia tinkamai.
+2. Zmogus klasės testai (test_zmogus.cpp): įgyvendinti 4 unit testai, tikrinantys, kad Zmogus klasė yra abstrakti, o jos funkcionalumas veikia per Studentas išvestinę klasę: testuojamas paveldėjimas, vardo ir pavardės set/get metodai.
+- Atnaujinti visi diegimui, ir paleidimui skirti failai. Atnaujintas CMakeLists.txt ir build.bat pritaikant, kad programa turės atlikti ir testus. run.bat ir run_tests.bat yra atskirti, nes jie .cpp failai tarpusavje nesusieti ir pagrindinėje programoje jų nereikėjo.
+
+**Pridedamas dokumentacijos html failo Studentas() ir Zmogus() aprašų ekrano kopijos (nepilni aprašai):**
+
+<img width="1902" height="917" alt="image" src="https://github.com/user-attachments/assets/eb5e7c50-5a4e-4c40-9c83-76f7f0ee35ea" />
+
+<img width="1908" height="916" alt="image" src="https://github.com/user-attachments/assets/eb2fa535-04aa-4327-925a-f941256b63f4" />
+
+**Prideami run_tests.bat rezultatai (unit testų rezultatai):**
+
+Studentas() testai:
+
+<img width="1448" height="667" alt="image" src="https://github.com/user-attachments/assets/7b2e63b5-f565-4a78-953a-a721e94fe09f" />
+
+Zmogus() testai:
+
+<img width="1455" height="481" alt="image" src="https://github.com/user-attachments/assets/90aade09-c662-45b4-8e14-efd071821f83" />
+
 
 ## 2. Programos naudojimosi instrukcija
 ### Pirmas žingsnis: Skaičiavimo metodo pasirinkimas.
-Pačiame pirmame etape (paleidus programą) varototjo yra klausiama kokią skaičiavimo sistemą naudoti:
+Pačiame pirmame etape (paleidus programą) vartotojo yra klausiama kokią skaičiavimo sistemą naudoti:
 - Vidurkis
 - Mediana
 - Vidurkis ir mediana
@@ -420,11 +437,11 @@ Programoje vartotojas gali rinktis tarp 6 funkcionalumų:
 #### 1. Įvesti studentų rezultatus rankiniu būdu.
 * Pasirinkus šį atvejį, varotojo klausiama į kokį konteinerį turi būti įrašomi studentų duomenys (vector ar list).
 * Toliau vartotojas pasirenka kiek studentų yra grupėje (kiek studentų jis norės įvesti) - įveda skaičių.
-* Vykdomas studentų duomenų įvedimas: įvedamas vardas, spaudžiama enter; įvedama pavardė, spaudžiama enter; įvedami studento pažymiai (1-10) - kaskart spausti enter, dvigubas enter nurodo, kad studentų pažymiai baigti įvesti; įvedamas studento egzamino pažymys (1-10), spaudžiama enter; kartojama su visais studentais; galutiniame etape terminalo lange išspauzdinami studentai ir jų galutiniai įvertinimai.
+* Vykdomas studentų duomenų įvedimas: įvedamas vardas, spaudžiama enter; įvedama pavardė, spaudžiama enter; įvedami studento pažymiai (1-10) - kaskart spausti enter, dvigubas enter nurodo, kad studentų pažymiai baigti įvesti; įvedamas studento egzamino pažymys (1-10), spaudžiama enter; kartojama su visais studentais; galutiniame etape terminalo lange išspauzdinami studentai ir jų galutiniai įvertinimai (stuento vardas, pavardė, galutinis įvertinimas pagal vidurkį ir (ar) medianą, duomenų saugojimo vietos adresas (atminties adresas)).
 * Vartotojo klausiama ar jis nori testi darbą su programa, jo paisirinkimai: t - vartotojas perkeliamas į menu, n - programa baigiama.
 
 #### 2. Įvesti studentų rezultatus iš .txt failo.
-* Pasirinkus šį atvejį, automatiškai nuskaitomas pasirinktas .txt failas.
+* Pasirinkus šį atvejį, automatiškai nuskaitomas pasirinktas .txt failas (šiuo metu failo pavadinimas nustatytas kaip stud1000.txt).
 * Iš jo gauti duomenys apskaičiuojami ir išpostinami į terminalą taip pat kaip ir menu 1 atveju.
 * Vartotojo klausiama ar jis nori testi darbą su programa, jo paisirinkimai: t - vartotojas perkeliamas į menu, n - programa baigiama.
 
@@ -450,7 +467,7 @@ Programoje vartotojas gali rinktis tarp 6 funkcionalumų:
 * Ekrane išvedami duomenys: kiek studentų su <5, >=5 galutinių įvertinimu ir nurodoma kiek trūko kiekviena operacija: nuskaitymas, skaičiavimas, rikiavimas, padalinimas, išvedimai ir bendras laikas.
 
 #### 6. Išeiti iš programos.
-* Skirta nutraukti programos darbą.
+* Skirta nutraukti programos darbą. Grįžtama į terminalą, galima iš naujo leisti run.bat, kad paleisti programą iš naujo.
 
 ## 3. Programos įdiegimo instrukcija
 1. Surasti vietą kur bus diegiama programa (pvz. C:\Programų failai - Windows naudotojams arba bet kuri kita direktorija).
@@ -460,19 +477,27 @@ Programoje vartotojas gali rinktis tarp 6 funkcionalumų:
 <img width="175" height="35" alt="image" src="https://github.com/user-attachments/assets/ed708e4c-9246-4ba1-82f0-b143889a43a4" />
 
 
-3. Programų failai sukurti aplanką "Studentai_v1". <img width="170" height="31" alt="image" src="https://github.com/user-attachments/assets/5d6972da-95ca-471b-b2e1-e98aa8729baf" />
+2. Programų failai aplanke sukurti aplanką "Studentai_v2" (galima naudoti ir bet kokį kitą pavadinimą, tik reikia tinkamai nurodyti direktoriją).
+ 
+<img width="92" height="117" alt="image" src="https://github.com/user-attachments/assets/caa269e7-e49a-419c-b6a9-9d9b0d5920bf" />
 
-5. Perkelti į aplanką Studentai_v1 visus programos failus.
+3. Perkelti į aplanką Studentai_v2 visus programos failus.
 
-<img width="227" height="708" alt="image" src="https://github.com/user-attachments/assets/a26a2a65-b627-46da-9643-09d2a80d9c43" />
+<img width="242" height="766" alt="image" src="https://github.com/user-attachments/assets/98e5137a-2186-4eff-8641-2e746cd82d52" />
 
-7. Įsijungti terminalą (cmd).
+3. Įsijungti terminalą (cmd).
 
-9. Pasirinkti tinkamą darbo aplinką (nurodyti visą kelią iki Studentai_v1 aplanko - pvz. cd "C:\Program files\Studentai_v1").
-10. Terminale paleisti: build.bat.
+4. Pasirinkti tinkamą darbo aplinką (nurodyti visą kelią iki Studentai_v2 aplanko - pvz. cd "C:\Program files\Studentai_v2").
 
-<img width="483" height="27" alt="image" src="https://github.com/user-attachments/assets/29ca8b4c-d553-4177-8154-132ec4ba6731" />
+5. Terminale paleisti: build.bat.
+
+<img width="471" height="32" alt="image" src="https://github.com/user-attachments/assets/938f85a5-dadd-4f39-93fd-7b89298d8a6e" />
   
-12. Terminalui baigus darbą (pasidarius pauzei) galima jungti programą: 1 būdas - terminale parašyti run.bat; 2 būdas - aplanke C:\Program files\Studentai_v1\build surasti Studentai_v1.exe ir jį paspausti du kartus.
+6. Terminalui baigus darbą (pasidarius pauzei) galima jungti programą: 1 būdas - terminale parašyti run.bat; 2 būdas - aplanke C:\Program files\Studentai_v2\build surasti Studentai_v2.exe ir jį paspausti du kartus.
 
-<img width="456" height="30" alt="image" src="https://github.com/user-attachments/assets/5441ca7e-acf1-4378-8ab5-5eaeb7e59b77" />
+<img width="453" height="26" alt="image" src="https://github.com/user-attachments/assets/4eb074be-83eb-4a25-9327-3371cccfc65f" />
+
+7. Unit testams. Jei reikalingi unit testų rezultatai (testavimas) terminale galima iškviesti testavimo .exe failus (iškviesti run_tests.bat).
+
+<img width="528" height="27" alt="image" src="https://github.com/user-attachments/assets/6e4dbc41-cf76-4650-a15a-0566f51c9c1a" />
+
