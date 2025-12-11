@@ -1,19 +1,40 @@
+/**
+ * @file studentas.cpp
+ * @brief Studentas klasės implementacija
+ */
+
 #include "studentas.h"
 #include <iomanip>
 #include <sstream>
 #include <limits>
 
+/**
+ * @brief Numatytasis konstruktorius
+ * Inicializuoja visus laukus nulinėmis reikšmėmis
+ */
 Studentas::Studentas() : Zmogus(), egzas_(0), rez_vid_(0.0f), rez_med_(0.0f) {}
 
+/**
+ * @brief Konstruktorius su parametrais
+ * @param vardas Studento vardas
+ * @param pavarde Studento pavardė
+ */
 Studentas::Studentas(const std::string& vardas, const std::string& pavarde)
     : Zmogus(vardas, pavarde), egzas_(0), rez_vid_(0.0f), rez_med_(0.0f) {}
 
-// Kopijavimo konstruktorius
+/**
+ * @brief Kopijavimo konstruktorius
+ * @param other Kitas Studentas objektas
+ */
 Studentas::Studentas(const Studentas& other)
     : Zmogus(other), paz_(other.paz_),
       egzas_(other.egzas_), rez_vid_(other.rez_vid_), rez_med_(other.rez_med_) {}
 
-// Kopijos priskyrimo konstruktorius
+/**
+ * @brief Priskyrimo operatorius
+ * @param other Kitas Studentas objektas
+ * @return Nuoroda į šį objektą
+ */
 Studentas& Studentas::operator=(const Studentas& other) {
     if (this != &other) {
         Zmogus::operator=(other);
@@ -25,7 +46,10 @@ Studentas& Studentas::operator=(const Studentas& other) {
     return *this;
 }
 
-// Destruktorius
+/**
+ * @brief Destruktorius
+ * Išvalo pažymių vektorių ir nustato nulines reikšmes
+ */
 Studentas::~Studentas() {
     paz_.clear();
     egzas_ = 0;
@@ -33,14 +57,52 @@ Studentas::~Studentas() {
     rez_med_ = 0.0f;
 }
 
-// Set'eriai
-void Studentas::setEgzas(int egzaminas) { egzas_ = egzaminas; }
-void Studentas::addPazymys(int pazymys) { paz_.push_back(pazymys); }
-void Studentas::setRezVid(float vid) { rez_vid_ = vid; }
-void Studentas::setRezMed(float med) { rez_med_ = med; }
-void Studentas::clearPaz() { paz_.clear(); }
+/**
+ * @brief Nustatyti egzamino įvertinimą
+ * @param egzaminas Egzamino pažymys
+ */
+void Studentas::setEgzas(int egzaminas) { 
+    egzas_ = egzaminas; 
+}
 
-// Galutinio įvertinimo skaičiavimas
+/**
+ * @brief Pridėti pažymį į vektorių
+ * @param pazymys Namų darbų pažymys
+ */
+void Studentas::addPazymys(int pazymys) { 
+    paz_.push_back(pazymys); 
+}
+
+/**
+ * @brief Nustatyti galutinį rezultatą (vidurkis)
+ * @param vid Galutinis rezultatas
+ */
+void Studentas::setRezVid(float vid) { 
+    rez_vid_ = vid; 
+}
+
+/**
+ * @brief Nustatyti galutinį rezultatą (mediana)
+ * @param med Galutinis rezultatas
+ */
+void Studentas::setRezMed(float med) { 
+    rez_med_ = med; 
+}
+
+/**
+ * @brief Išvalyti visus pažymius
+ */
+void Studentas::clearPaz() { 
+    paz_.clear(); 
+}
+
+/**
+ * @brief Skaičiuoti galutinį rezultatą
+ * @param metodas 1-vidurkis, 2-mediana, 3-abu
+ * @param mediana Namų darbų pažymių mediana
+ * 
+ * Formulė: Galutinis = 0.6 * Egzaminas + 0.4 * ND
+ */
 void Studentas::skaiciuotiRezultatus(int metodas, float mediana) {
     if ((metodas == 1 || metodas == 3) && !paz_.empty()) {
         int sum = 0;
@@ -52,7 +114,12 @@ void Studentas::skaiciuotiRezultatus(int metodas, float mediana) {
     }
 }
 
-// Virtualios funkcijos rezultatų spauzdinimas
+/**
+ * @brief Spausdinti studento duomenis
+ * @param os Išvesties srautas
+ * 
+ * Išveda vardą, pavardę ir galutinį rezultatą
+ */
 void Studentas::spausdinti(std::ostream& os) const {
     os << std::left << std::setw(15) << vard_
        << "| " << std::setw(15) << pav_
@@ -68,20 +135,47 @@ void Studentas::spausdinti(std::ostream& os) const {
     }
 }
 
+/**
+ * @brief Palyginti pagal vidurkį
+ * @param a Pirmas studentas
+ * @param b Antras studentas
+ * @return true, jei a.rez_vid() < b.rez_vid()
+ */
 bool lygintiVid(const Studentas& a, const Studentas& b) {
     return a.rez_vid() < b.rez_vid();
 }
+
+/**
+ * @brief Palyginti pagal medianą
+ * @param a Pirmas studentas
+ * @param b Antras studentas
+ * @return true, jei a.rez_med() < b.rez_med()
+ */
 bool lygintiMed(const Studentas& a, const Studentas& b) {
     return a.rez_med() < b.rez_med();
 }
 
-// Išvedimo operatorius (išvedimui į ekraną)
+/**
+ * @brief Išvesties operatorius
+ * @param os Išvesties srautas
+ * @param s Studentas objektas
+ * @return Išvesties srautas
+ * 
+ * Naudoja spausdinti() funkciją
+ */
 std::ostream& operator<<(std::ostream& os, const Studentas& s) {
     s.spausdinti(os);
     return os;
 }
 
-// Įvedimo operatorius (įvedimui su nežinomu pažymių kiekiu)
+/**
+ * @brief Įvesties operatorius
+ * @param is Įvesties srautas
+ * @param s Studentas objektas
+ * @return Įvesties srautas
+ * 
+ * Interaktyviai prašo įvesti vardą, pavardę, pažymius ir egzaminą
+ */
 std::istream& operator>>(std::istream& is, Studentas& s) {
     s.paz_.clear();
     
